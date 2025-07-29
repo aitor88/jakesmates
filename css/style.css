@@ -4,21 +4,16 @@
     --mario-yellow: #F7B000;
     --mario-brown: #7E2500;
     --sky-blue: #5C94FC;
+    --sky-blue-dark: #3A5CFF;
     --grass-green: #4CAF50;
-    --block-size: clamp(60px, 18vw, 100px);
     --font-family: 'Press Start 2P', cursive;
 }
 
 /* Estilos generales y de fondo */
 body {
     font-family: var(--font-family);
-    background-color: var(--sky-blue);
-    background-image: 
-        url('https://www.transparentpng.com/thumb/mario/aT5K6w-super-mario-bros-cloud-transparent-background.png'),
-        url('https://www.transparentpng.com/thumb/mario/aT5K6w-super-mario-bros-cloud-transparent-background.png');
-    background-repeat: no-repeat;
-    background-position: 10% 15%, 85% 25%;
-    background-size: 150px, 100px;
+    /* CAMBIO: Fondo con gradiente CSS, más fiable que imágenes externas */
+    background: linear-gradient(to bottom, var(--sky-blue-dark) 0%, var(--sky-blue) 100%);
     margin: 0;
     padding: 0;
     display: flex;
@@ -159,7 +154,8 @@ body {
 #mario {
     width: 60px;
     height: 80px;
-    background-image: url('https://i.imgur.com/J3337sE.png');
+    /* CAMBIO: Enlace a la imagen de Mario corregido y más fiable. */
+    background-image: url('https://www.mariowiki.com/images/1/15/SMB_Mario_Sprite.png');
     background-size: contain;
     background-repeat: no-repeat;
     position: absolute;
@@ -168,6 +164,7 @@ body {
     transform: translateX(-50%);
     transition: left 0.5s ease-in-out, bottom 0.5s ease-in-out;
     z-index: 10;
+    image-rendering: pixelated; /* Para que se vea pixelado y no borroso */
 }
 
 /* Modal para mensajes de fin de juego o nivel */
@@ -217,11 +214,11 @@ body {
 /* Animación de encestar mejorada */
 #levelup-animation {
     display: none;
-    height: 220px; /* Más altura para la animación */
+    height: 220px; 
     width: 100%;
     position: relative;
     margin-bottom: 20px;
-    perspective: 500px; /* Añadido para efectos 3D */
+    perspective: 500px; 
 }
 #hoop {
     width: 100px;
