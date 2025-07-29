@@ -187,6 +187,11 @@ body {
     max-width: 90%;
     position: relative;
     overflow: hidden;
+    /* CAMBIO: Usar Flexbox para un centrado perfecto */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 #modal-content.shake {
     animation: screen-shake 0.3s ease-out;
@@ -309,7 +314,7 @@ body {
     animation: sparkle-blast 1.5s ease-out forwards;
 }
 
-/* CAMBIO: Estilos para el nuevo botón "Hasi!" */
+/* Estilos para el nuevo botón "Hasi!" */
 #start-level-btn {
     background-color: var(--grass-green);
     color: white;
