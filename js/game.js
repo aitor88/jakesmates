@@ -22,7 +22,9 @@ const dom = {
     levelupAnimation: document.getElementById('levelup-animation'),
     confettiContainer: document.getElementById('confetti-container'),
     musicToggleBtn: document.getElementById('music-toggle-btn'),
-    backgroundMusic: document.getElementById('background-music')
+    backgroundMusic: document.getElementById('background-music'),
+    // CAMBIO: Añadido el nuevo botón de reinicio
+    restartBtn: document.getElementById('restart-btn')
 };
 
 // --- SOINUAK ---
@@ -43,13 +45,14 @@ function startGame() {
     gameState.lives = gameConfig.initialLives;
     gameState.boardLocked = false;
     updateLivesDisplay();
-    setupLevel();
+    // CAMBIO: Al reiniciar, vamos a la pantalla de introducción del primer nivel
+    showLevelIntro();
 }
 
 function setupLevel() {
     gameState.currentStep = 0;
     gameState.boardLocked = false;
-    dom.gameBoard.innerHTML = ''; // Limpia el botón "Hasi!" o los bloques anteriores
+    dom.gameBoard.innerHTML = '';
 
     const levelData = gameConfig.levels[gameState.currentLevel];
     if (!levelData) {
@@ -211,20 +214,17 @@ function levelUp() {
 
         dom.modalButton.onclick = () => {
             hideModal();
-            // CAMBIO: Llamar a la nueva función de introducción en lugar de setupLevel directamente
             showLevelIntro();
         };
     }, 2500);
 }
 
-// CAMBIO: Nueva función para mostrar la introducción del nivel y el botón "Hasi!"
 function showLevelIntro() {
     if (!gameConfig.levels[gameState.currentLevel]) {
         winGame();
         return;
     }
 
-    // Limpiar el tablero y prepararlo para el botón
     dom.gameBoard.innerHTML = '';
     dom.gameBoard.style.display = 'flex';
     dom.gameBoard.style.justifyContent = 'center';
@@ -238,7 +238,6 @@ function showLevelIntro() {
     startButton.id = 'start-level-btn';
     startButton.textContent = 'Hasi!';
     startButton.onclick = () => {
-        // Al hacer clic, volver a poner el tablero en modo grid y empezar el nivel
         dom.gameBoard.style.display = 'grid';
         setupLevel();
     };
@@ -404,9 +403,13 @@ function toggleMusic() {
 // --- JOKOAREN HASIERA ---
 window.onload = () => {
     dom.musicToggleBtn.addEventListener('click', toggleMusic);
+    // CAMBIO: Añadir listener para el nuevo botón de reinicio
+    dom.restartBtn.addEventListener('click', startGame);
+
     showModal('Zenbakien Jauziak', 'Jolasten Hasi!', async () => {
         await Tone.start();
-        startGame();
+        // CAMBIO: El juego ahora empieza con la intro del nivel 1
+        showLevelIntro();
     });
 
     window.addEventListener('resize', () => {
