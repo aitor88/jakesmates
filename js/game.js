@@ -61,6 +61,7 @@ const dom = {
     modalMessage: document.getElementById('modal-message'),
     modalButton: document.getElementById('modal-button'),
     levelupAnimation: document.getElementById('levelup-animation'),
+    confettiContainer: document.getElementById('confetti-container'),
     musicToggleBtn: document.getElementById('music-toggle-btn'),
     backgroundMusic: document.getElementById('background-music')
 };
@@ -72,7 +73,8 @@ const sounds = {
     wrong: new Tone.Synth({ oscillator: { type: 'triangle' }, envelope: { attack: 0.01, decay: 0.5, sustain: 0, release: 0.1 } }).toDestination(),
     levelUp: new Tone.Synth({ oscillator: { type: 'sawtooth' }, envelope: { attack: 0.01, decay: 0.4, sustain: 0, release: 0.1 } }).toDestination(),
     gameOver: new Tone.Synth({ oscillator: { type: 'fmsquare' }, envelope: { attack: 0.1, decay: 0.8, sustain: 0, release: 0.1 } }).toDestination(),
-    swoosh: new Tone.NoiseSynth({ noise: { type: 'white' }, envelope: { attack: 0.005, decay: 0.2, sustain: 0 } }).toDestination()
+    swoosh: new Tone.NoiseSynth({ noise: { type: 'white' }, envelope: { attack: 0.005, decay: 0.2, sustain: 0 } }).toDestination(),
+    confetti: new Tone.Synth({ oscillator: { type: 'fmsine' }, envelope: { attack: 0.01, decay: 0.3, sustain: 0, release: 0.1 } }).toDestination()
 };
 
 // --- LOGIKA NAGUSIA ---
@@ -132,31 +134,42 @@ function setupLevel() {
     gameState.sequence = correctItems;
     shuffleArray(displayItems);
     
-    displayItems.forEach(item => createBlock(item, levelData.type));
+    displayItems.forEach(item => createBlock(item));
+    setGridColumns(displayItems.length);
 }
 
-function createBlock(item, type) {
+function createBlock(item) {
     const block = document.createElement('div');
     block.classList.add('block');
+    
+    const blockInner = document.createElement('div');
+    blockInner.classList.add('block-inner');
+
     const content = document.createElement('span');
     content.classList.add('block-content');
     
-    let blockValue, blockColor;
+    let blockValue;
 
-    if (typeof item === 'object' && item.text) { // Math problem
+    if (typeof item === 'object' && item.text) { 
         content.textContent = item.text;
         blockValue = item.answer;
-    } else if (colorNames.includes(item)) { // Color level
+        if (String(item.text).length >= 4) {
+            content.classList.add('small-font');
+        }
+    } else if (colorNames.includes(item)) { 
         blockValue = item;
-        blockColor = colorMap[item].hex;
-        block.style.backgroundColor = blockColor;
+        blockInner.style.backgroundColor = colorMap[item].hex;
         block.dataset.color = item;
-    } else { // Number level
+    } else { 
         content.textContent = item;
         blockValue = item;
+        if (String(item).length >= 3) {
+            content.classList.add('small-font');
+        }
     }
 
-    block.appendChild(content);
+    blockInner.appendChild(content);
+    block.appendChild(blockInner);
     block.addEventListener('click', () => handleBlockClick(block, blockValue));
     dom.gameBoard.appendChild(block);
 }
@@ -216,8 +229,10 @@ function levelUp() {
     dom.levelupAnimation.style.display = 'block';
     dom.levelupAnimation.classList.add('play');
 
-    sounds.swoosh.triggerAttack(Tone.now() + 0.8);
-    sounds.levelUp.triggerAttackRelease('C5', '0.4', Tone.now() + 1);
+    sounds.swoosh.triggerAttack(Tone.now() + 0.7);
+    sounds.levelUp.triggerAttackRelease('C5', '0.4', Tone.now() + 0.8);
+    
+    setTimeout(createConfetti, 800);
 
     setTimeout(() => {
         dom.levelupAnimation.style.display = 'none';
@@ -230,7 +245,11 @@ function levelUp() {
 
         dom.modalButton.onclick = () => {
             hideModal();
-            setupLevel();
+            if (gameConfig.levels[gameState.currentLevel]) {
+                 setupLevel();
+            } else {
+                 winGame();
+            }
         };
     }, 2000);
 }
@@ -244,6 +263,48 @@ function winGame() {
 }
 
 // --- FUNTZIO LAGUNTZAILEAK ---
+
+function createConfetti() {
+    dom.confettiContainer.innerHTML = '';
+    const confettiCount = 30;
+    const confettiColors = ['#E52521', '#3A5CFF', '#F7B000', '#4CAF50', '#FFFFFF'];
+    
+    sounds.confetti.triggerAttackRelease('C6', '0.2');
+
+    for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        
+        const x = (Math.random() - 0.5) * 300;
+        const y = (Math.random() - 0.5) * 300;
+        
+        confetti.style.setProperty('--x', `${x}px`);
+        confetti.style.setProperty('--y', `${y}px`);
+        confetti.style.setProperty('--color', confettiColors[Math.floor(Math.random() * confettiColors.length)]);
+        confetti.style.animationDelay = `${Math.random() * 0.2}s`;
+        
+        dom.confettiContainer.appendChild(confetti);
+    }
+}
+
+function setGridColumns(itemCount) {
+    let cols;
+    const isMobile = window.innerWidth < 600;
+
+    if (isMobile) {
+        if (itemCount <= 4) cols = 2;
+        else if (itemCount <= 9) cols = 3;
+        else cols = 4;
+    } else { // Escritorio
+        if (itemCount <= 5) cols = itemCount;
+        else if (itemCount === 6 || itemCount === 9) cols = 3;
+        else if (itemCount === 7 || itemCount === 8 || itemCount === 11 || itemCount === 12) cols = 4;
+        else if (itemCount === 10) cols = 5;
+        else cols = 4; // Valor por defecto para otros casos
+    }
+    dom.gameBoard.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+}
+
 
 function updateLivesDisplay() {
     dom.livesDisplay.innerHTML = Array(gameState.lives).fill('<span class="heart">❤</span>').join('');
@@ -328,7 +389,7 @@ function generateDistractors(correctItems, count, max, itemPool) {
 }
 
 function toggleMusic() {
-    if (dom.backgroundMusic.src && dom.backgroundMusic.src !== window.location.href) {
+    if (dom.backgroundMusic.src && dom.backgroundMusic.src.includes('http')) { 
         if (gameState.musicPlaying) {
             dom.backgroundMusic.pause();
             dom.musicToggleBtn.textContent = '🔇';
@@ -337,7 +398,17 @@ function toggleMusic() {
             dom.musicToggleBtn.textContent = '🔊';
         }
         gameState.musicPlaying = !gameState.musicPlaying;
-    } else {
+    } else if (dom.backgroundMusic.src) { 
+         if (gameState.musicPlaying) {
+            dom.backgroundMusic.pause();
+            dom.musicToggleBtn.textContent = '🔇';
+        } else {
+            dom.backgroundMusic.play().catch(e => console.error("Musika ezin da erreproduzitu:", e));
+            dom.musicToggleBtn.textContent = '🔊';
+        }
+        gameState.musicPlaying = !gameState.musicPlaying;
+    }
+    else {
         console.log("Ez da musikaren URL-rik ezarri.");
     }
 }
@@ -349,5 +420,11 @@ window.onload = () => {
         await Tone.start();
         startGame();
     });
-};
 
+    window.addEventListener('resize', () => {
+        const itemCount = dom.gameBoard.children.length;
+        if (itemCount > 0) {
+            setGridColumns(itemCount);
+        }
+    });
+};
