@@ -188,14 +188,13 @@ body {
     position: relative;
     overflow: hidden;
 }
-/* CAMBIO: Animación de temblor para el modal */
 #modal-content.shake {
     animation: screen-shake 0.3s ease-out;
 }
 #modal-message {
     font-size: 1.8rem;
     margin-bottom: 20px;
-    opacity: 0; /* Empieza invisible para animarla */
+    opacity: 0; 
 }
 #modal-message.visible {
     animation: fade-in-up 0.5s forwards;
@@ -211,13 +210,13 @@ body {
     cursor: pointer;
     box-shadow: 0 5px 0 #2E8B57;
     transition: transform 0.1s, box-shadow 0.1s;
-    opacity: 0; /* Empieza invisible para animarlo */
+    opacity: 0; 
 }
 #modal-button.visible {
     animation: fade-in-up 0.5s 0.2s forwards;
 }
 
-/* CAMBIO: Animación de encestar profesional */
+/* Animación de encestar profesional */
 #levelup-animation {
     display: none;
     height: 250px;
@@ -309,6 +308,26 @@ body {
     opacity: 0;
     animation: sparkle-blast 1.5s ease-out forwards;
 }
+
+/* CAMBIO: Estilos para el nuevo botón "Hasi!" */
+#start-level-btn {
+    background-color: var(--grass-green);
+    color: white;
+    padding: 20px 40px;
+    border-radius: 15px;
+    border: 5px solid white;
+    font-family: var(--font-family);
+    font-size: 1.8rem;
+    cursor: pointer;
+    box-shadow: 0 8px 0 #2E8B57;
+    transition: transform 0.1s, box-shadow 0.1s;
+    animation: fade-in-up 0.5s;
+}
+#start-level-btn:active {
+    transform: translateY(5px);
+    box-shadow: 0 3px 0 #2E8B57;
+}
+
 
 /* Animaciones */
 @keyframes correct-jump {
