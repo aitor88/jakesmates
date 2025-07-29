@@ -5,7 +5,8 @@ let gameState = {
     sequence: [],
     currentStep: 0,
     boardLocked: false,
-    musicPlaying: false
+    musicPlaying: false,
+    currentQuestionData: null
 };
 
 // --- DOM-EKO ELEMENTUAK ---
@@ -18,7 +19,7 @@ const dom = {
     modal: document.getElementById('modal'),
     modalContent: document.getElementById('modal-content'),
     modalMessage: document.getElementById('modal-message'),
-    modalButton: document.getElementById('modal-button'),
+    modalButtonContainer: document.getElementById('modal-button-container'),
     levelupAnimation: document.getElementById('levelup-animation'),
     confettiContainer: document.getElementById('confetti-container'),
     musicToggleBtn: document.getElementById('music-toggle-btn'),
@@ -44,23 +45,26 @@ function startGame() {
     gameState.lives = gameConfig.initialLives;
     gameState.boardLocked = false;
     updateLivesDisplay();
-    showLevelIntro();
+    setupLevel();
 }
 
 function setupLevel() {
     gameState.currentStep = 0;
     gameState.boardLocked = false;
     dom.gameBoard.innerHTML = '';
+    dom.gameBoard.style.display = 'grid';
 
-    // CAMBIO: La lógica ahora elige una pregunta aleatoria del array del nivel
     const levelArray = gameConfig.levels[gameState.currentLevel];
     if (!levelArray) {
         winGame();
         return;
     }
-    const levelData = levelArray[Math.floor(Math.random() * levelArray.length)];
+    gameState.currentQuestionData = levelArray[Math.floor(Math.random() * levelArray.length)];
+    const levelData = gameState.currentQuestionData;
+
+    dom.messageBar.textContent = levelData.message;
+    dom.levelDisplay.textContent = `Maila: ${gameState.currentLevel + 1}`;
     
-    // El resto de la función sigue igual, trabajando con el 'levelData' seleccionado
     let correctItems = [];
     let displayItems = [];
     
@@ -70,7 +74,7 @@ function setupLevel() {
         case 'even':
         case 'odd':
             correctItems = generateNumberSequence(levelData);
-            displayItems = [...correctItems, ...generateDistractors(correctItems, levelData.distractors, levelData.max || 25)];
+            displayItems = [...correctItems, ...generateDistractors(correctItems, levelData.distractors, levelData.max || 50)];
             break;
         case 'addition':
         case 'subtraction':
@@ -137,20 +141,14 @@ function createBlock(item) {
 function handleBlockClick(blockElement, blockValue) {
     if (gameState.boardLocked || blockElement.classList.contains('used')) return;
 
-    // Para obtener el tipo de nivel, necesitamos volver a seleccionar una pregunta (o guardarla)
-    // Manera sencilla: simplemente coger la primera pregunta del nivel para saber el tipo
-    const levelType = gameConfig.levels[gameState.currentLevel][0].type;
-    const levelColor = gameConfig.levels[gameState.currentLevel][0].color;
-
+    const levelData = gameState.currentQuestionData;
 
     let expectedValue = gameState.sequence[gameState.currentStep];
     if (typeof expectedValue === 'object') expectedValue = expectedValue.answer;
 
     let isCorrect = false;
-    if (levelType === 'color_find') {
-        if (blockValue === levelColor) isCorrect = true;
-    } else if (levelType === 'color_sequence') {
-        if (blockValue === expectedValue) isCorrect = true;
+    if (levelData.type === 'color_find') {
+        if (blockValue === levelData.color) isCorrect = true;
     } else {
         if (blockValue === expectedValue) isCorrect = true;
     }
@@ -186,82 +184,40 @@ function handleWrongClick() {
 
 function levelUp() {
     gameState.currentLevel++;
+    const nextAction = gameConfig.levels[gameState.currentLevel] ? setupLevel : winGame;
     
-    dom.modal.style.display = 'flex';
-    dom.modalMessage.style.display = 'none';
-    dom.modalButton.style.display = 'none';
-    dom.modalMessage.classList.remove('visible');
-    dom.modalButton.classList.remove('visible');
-
-    dom.levelupAnimation.style.display = 'block';
-    dom.levelupAnimation.classList.add('play');
-
-    setTimeout(() => {
-        dom.modalContent.classList.add('shake');
-        sounds.swoosh.triggerAttack();
-    }, 900);
-
-    setTimeout(() => {
-        dom.modalContent.classList.remove('shake');
-        createSparkles();
-        sounds.levelUp.triggerAttackRelease('C5', '0.4');
-    }, 1200);
-
-    setTimeout(() => {
-        dom.levelupAnimation.style.display = 'none';
-        dom.levelupAnimation.classList.remove('play');
-
-        dom.modalMessage.textContent = 'Maila gaindituta!';
-        dom.modalButton.textContent = 'Hurrengo Maila';
-        dom.modalMessage.style.display = 'block';
-        dom.modalButton.style.display = 'block';
-        dom.modalMessage.classList.add('visible');
-        dom.modalButton.classList.add('visible');
-
-        dom.modalButton.onclick = () => {
-            hideModal();
-            showLevelIntro();
-        };
-    }, 2500);
-}
-
-function showLevelIntro() {
-    if (!gameConfig.levels[gameState.currentLevel]) {
-        winGame();
-        return;
-    }
-
-    dom.gameBoard.innerHTML = '';
-    dom.gameBoard.style.display = 'flex';
-    dom.gameBoard.style.justifyContent = 'center';
-    dom.gameBoard.style.alignItems = 'center';
-
-    // CAMBIO: Obtener el mensaje de una pregunta aleatoria para mostrarlo
-    const levelArray = gameConfig.levels[gameState.currentLevel];
-    const randomQuestionForIntro = levelArray[Math.floor(Math.random() * levelArray.length)];
-    dom.messageBar.textContent = randomQuestionForIntro.message;
-    dom.levelDisplay.textContent = `Maila: ${gameState.currentLevel + 1}`;
-
-    const startButton = document.createElement('button');
-    startButton.id = 'start-level-btn';
-    startButton.textContent = 'Hasi!';
-    startButton.onclick = () => {
-        dom.gameBoard.style.display = 'grid';
-        setupLevel();
-    };
-
-    dom.gameBoard.appendChild(startButton);
+    showModal({
+        message: 'Maila gaindituta!',
+        buttons: [{ text: 'Hurrengo Maila', action: nextAction, class: 'confirm' }],
+        showAnimation: true
+    });
 }
 
 function gameOver() {
-    showModal('Uh oh! Jokoa amaitu da', 'Berriro Jokatu', startGame);
+    showModal({
+        message: 'Uh oh! Jokoa amaitu da',
+        buttons: [{ text: 'Berriro Jokatu', action: startGame, class: 'confirm' }]
+    });
 }
 
 function winGame() {
-    showModal('Zorionak! Irabazi duzu!', 'Berriro Jokatu', startGame);
+    showModal({
+        message: 'Zorionak! Irabazi duzu!',
+        buttons: [{ text: 'Berriro Jokatu', action: startGame, class: 'confirm' }]
+    });
 }
 
 // --- FUNTZIO LAGUNTZAILEAK ---
+
+function confirmRestart() {
+    showModal({
+        message: 'Ziur zaude berrabiarazi nahi duzula?',
+        buttons: [
+            { text: 'Bai', action: startGame, class: 'confirm' },
+            { text: 'Ez', action: () => {}, class: 'cancel' }
+        ]
+    });
+}
 
 function createSparkles() {
     dom.confettiContainer.innerHTML = '';
@@ -310,22 +266,48 @@ function animateMarioJump(targetBlock) {
     sounds.jump.triggerAttackRelease('C4', '0.1');
 }
 
-function showModal(message, buttonText, buttonAction) {
+function showModal({ message, buttons, showAnimation = false }) {
+    dom.modalMessage.style.display = 'none';
+    dom.modalButtonContainer.innerHTML = '';
     dom.levelupAnimation.style.display = 'none';
-    dom.modalMessage.style.display = 'block';
-    dom.modalButton.style.display = 'block';
-    dom.modalMessage.classList.remove('visible');
-    dom.modalButton.classList.remove('visible');
+    dom.modalContent.classList.remove('shake');
     
-    dom.modalMessage.textContent = message;
-    dom.modalButton.textContent = buttonText;
-    dom.modalMessage.classList.add('visible');
-    dom.modalButton.classList.add('visible');
-    
-    dom.modalButton.onclick = () => {
-        hideModal();
-        buttonAction();
+    const displayContent = () => {
+        dom.modalMessage.textContent = message;
+        dom.modalMessage.style.display = 'block';
+        dom.modalMessage.classList.add('visible');
+        
+        buttons.forEach((btnInfo, index) => {
+            const button = document.createElement('button');
+            button.textContent = btnInfo.text;
+            button.classList.add('modal-button', `modal-button-${btnInfo.class}`);
+            button.onclick = () => {
+                hideModal();
+                btnInfo.action();
+            };
+            dom.modalButtonContainer.appendChild(button);
+            setTimeout(() => button.classList.add('visible'), 100 * index);
+        });
     };
+
+    if (showAnimation) {
+        dom.levelupAnimation.style.display = 'block';
+        dom.levelupAnimation.classList.add('play');
+        setTimeout(() => dom.modalContent.classList.add('shake'), 900);
+        setTimeout(() => {
+            dom.modalContent.classList.remove('shake');
+            createSparkles();
+            sounds.levelUp.triggerAttackRelease('C5', '0.4');
+        }, 1200);
+        setTimeout(() => {
+            dom.levelupAnimation.style.display = 'none';
+            dom.levelupAnimation.classList.remove('play');
+            displayContent();
+        }, 2500);
+    } else {
+        displayContent();
+    }
+
     dom.modal.style.display = 'flex';
 }
 
@@ -411,11 +393,15 @@ function toggleMusic() {
 // --- JOKOAREN HASIERA ---
 window.onload = () => {
     dom.musicToggleBtn.addEventListener('click', toggleMusic);
-    dom.restartBtn.addEventListener('click', startGame);
+    dom.restartBtn.addEventListener('click', confirmRestart);
 
-    showModal('Zenbakien Jauziak', 'Jolasten Hasi!', async () => {
-        await Tone.start();
-        showLevelIntro();
+    // CAMBIO: Restaurado el botón de inicio inicial
+    showModal({
+        message: 'Zenbakien Jauziak',
+        buttons: [{ text: 'Jolasten Hasi!', action: async () => {
+            await Tone.start();
+            startGame();
+        }, class: 'confirm' }]
     });
 
     window.addEventListener('resize', () => {
