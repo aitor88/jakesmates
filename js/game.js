@@ -134,8 +134,9 @@ function setupLevel() {
     gameState.sequence = correctItems;
     shuffleArray(displayItems);
     
-    displayItems.forEach(item => createBlock(item));
+    // CAMBIO: La lógica de la cuadrícula se aplica ANTES de crear los bloques
     setGridColumns(displayItems.length);
+    displayItems.forEach(item => createBlock(item));
 }
 
 function createBlock(item) {
@@ -287,21 +288,14 @@ function createConfetti() {
     }
 }
 
+/**
+ * CAMBIO: Lógica simplificada para crear siempre una cuadrícula cuadrada (NxN).
+ */
 function setGridColumns(itemCount) {
-    let cols;
-    const isMobile = window.innerWidth < 600;
-
-    if (isMobile) {
-        if (itemCount <= 4) cols = 2;
-        else if (itemCount <= 9) cols = 3;
-        else cols = 4;
-    } else { // Escritorio
-        if (itemCount <= 5) cols = itemCount;
-        else if (itemCount === 6 || itemCount === 9) cols = 3;
-        else if (itemCount === 7 || itemCount === 8 || itemCount === 11 || itemCount === 12) cols = 4;
-        else if (itemCount === 10) cols = 5;
-        else cols = 4; // Valor por defecto para otros casos
-    }
+    // Calcula la raíz cuadrada y la redondea hacia arriba para obtener el tamaño del lado.
+    // Ej: 9 items -> sqrt(9) = 3 -> 3x3.
+    // Ej: 10 items -> sqrt(10) = 3.16 -> ceil = 4 -> 4x4.
+    const cols = Math.ceil(Math.sqrt(itemCount));
     dom.gameBoard.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
 }
 
