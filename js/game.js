@@ -49,16 +49,13 @@ function startGame() {
 function setupLevel() {
     gameState.currentStep = 0;
     gameState.boardLocked = false;
-    dom.gameBoard.innerHTML = '';
+    dom.gameBoard.innerHTML = ''; // Limpia el botón "Hasi!" o los bloques anteriores
 
     const levelData = gameConfig.levels[gameState.currentLevel];
     if (!levelData) {
         winGame();
         return;
     }
-
-    dom.messageBar.textContent = levelData.message;
-    dom.levelDisplay.textContent = `Maila: ${gameState.currentLevel + 1}`;
     
     let correctItems = [];
     let displayItems = [];
@@ -178,7 +175,6 @@ function handleWrongClick() {
     }
 }
 
-// CAMBIO: Función levelUp mejorada para controlar la nueva animación
 function levelUp() {
     gameState.currentLevel++;
     
@@ -191,7 +187,6 @@ function levelUp() {
     dom.levelupAnimation.style.display = 'block';
     dom.levelupAnimation.classList.add('play');
 
-    // Sincronizar sonidos y efectos con la animación
     setTimeout(() => {
         dom.modalContent.classList.add('shake');
         sounds.swoosh.triggerAttack();
@@ -203,7 +198,6 @@ function levelUp() {
         sounds.levelUp.triggerAttackRelease('C5', '0.4');
     }, 1200);
 
-    // Mostrar el mensaje y el botón después de la animación
     setTimeout(() => {
         dom.levelupAnimation.style.display = 'none';
         dom.levelupAnimation.classList.remove('play');
@@ -217,13 +211,39 @@ function levelUp() {
 
         dom.modalButton.onclick = () => {
             hideModal();
-            if (gameConfig.levels[gameState.currentLevel]) {
-                 setupLevel();
-            } else {
-                 winGame();
-            }
+            // CAMBIO: Llamar a la nueva función de introducción en lugar de setupLevel directamente
+            showLevelIntro();
         };
     }, 2500);
+}
+
+// CAMBIO: Nueva función para mostrar la introducción del nivel y el botón "Hasi!"
+function showLevelIntro() {
+    if (!gameConfig.levels[gameState.currentLevel]) {
+        winGame();
+        return;
+    }
+
+    // Limpiar el tablero y prepararlo para el botón
+    dom.gameBoard.innerHTML = '';
+    dom.gameBoard.style.display = 'flex';
+    dom.gameBoard.style.justifyContent = 'center';
+    dom.gameBoard.style.alignItems = 'center';
+
+    const levelData = gameConfig.levels[gameState.currentLevel];
+    dom.messageBar.textContent = levelData.message;
+    dom.levelDisplay.textContent = `Maila: ${gameState.currentLevel + 1}`;
+
+    const startButton = document.createElement('button');
+    startButton.id = 'start-level-btn';
+    startButton.textContent = 'Hasi!';
+    startButton.onclick = () => {
+        // Al hacer clic, volver a poner el tablero en modo grid y empezar el nivel
+        dom.gameBoard.style.display = 'grid';
+        setupLevel();
+    };
+
+    dom.gameBoard.appendChild(startButton);
 }
 
 function gameOver() {
@@ -236,7 +256,6 @@ function winGame() {
 
 // --- FUNTZIO LAGUNTZAILEAK ---
 
-// CAMBIO: Función renombrada y mejorada para crear destellos
 function createSparkles() {
     dom.confettiContainer.innerHTML = '';
     const sparkleCount = 40;
