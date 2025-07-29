@@ -12,7 +12,7 @@
 /* Estilos generales y de fondo */
 body {
     font-family: var(--font-family);
-    /* CAMBIO: Fondo con gradiente CSS, más fiable que imágenes externas */
+    /* Fondo con gradiente CSS, más fiable que imágenes externas */
     background: linear-gradient(to bottom, var(--sky-blue-dark) 0%, var(--sky-blue) 100%);
     margin: 0;
     padding: 0;
@@ -102,7 +102,7 @@ body {
     position: relative;
 }
 
-/* Estilo de los bloques '?' */
+/* Estilo de los bloques */
 .block {
     width: 100%; 
     padding-bottom: 100%;
@@ -154,7 +154,7 @@ body {
 #mario {
     width: 60px;
     height: 80px;
-    /* CAMBIO: Enlace a la imagen de Mario corregido y más fiable. */
+    /* Enlace a la imagen de Mario corregido y más fiable. */
     background-image: url('https://www.mariowiki.com/images/1/15/SMB_Mario_Sprite.png');
     background-size: contain;
     background-repeat: no-repeat;
