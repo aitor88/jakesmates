@@ -23,7 +23,6 @@ const dom = {
     modalButtonContainer: document.getElementById('modal-button-container'),
     levelupAnimation: document.getElementById('levelup-animation'),
     sparkleContainer: document.getElementById('sparkle-container'),
-    // CAMBIO: Eliminada la referencia al botón de música
     backgroundMusic: document.getElementById('background-music'),
     restartBtn: document.getElementById('restart-btn')
 };
@@ -378,7 +377,6 @@ function generateDistractors(correctItems, count, max, itemPool) {
     return Array.from(distractors);
 }
 
-// CAMBIO: Eliminada la función toggleMusic
 // --- JOKOAREN HASIERA ---
 window.onload = () => {
     dom.restartBtn.addEventListener('click', confirmRestart);
@@ -387,7 +385,6 @@ window.onload = () => {
         message: 'Zenbakien Jauziak',
         buttons: [{ text: 'Jolasten Hasi!', action: async () => {
             await Tone.start();
-            // Iniciar la música de fondo si hay una fuente
             if (dom.backgroundMusic.src && dom.backgroundMusic.src !== window.location.href) {
                 dom.backgroundMusic.play().catch(e => console.error("Musika ezin da erreproduzitu:", e));
             }
@@ -401,4 +398,9 @@ window.onload = () => {
             setGridColumns(itemCount);
         }
     });
+
+    // CAMBIO: Código para prevenir el "pull-to-refresh" en móviles
+    document.body.addEventListener('touchmove', function(event) {
+        event.preventDefault();
+    }, { passive: false });
 };
