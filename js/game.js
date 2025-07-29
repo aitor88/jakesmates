@@ -23,7 +23,6 @@ const dom = {
     confettiContainer: document.getElementById('confetti-container'),
     musicToggleBtn: document.getElementById('music-toggle-btn'),
     backgroundMusic: document.getElementById('background-music'),
-    // CAMBIO: Añadido el nuevo botón de reinicio
     restartBtn: document.getElementById('restart-btn')
 };
 
@@ -45,7 +44,6 @@ function startGame() {
     gameState.lives = gameConfig.initialLives;
     gameState.boardLocked = false;
     updateLivesDisplay();
-    // CAMBIO: Al reiniciar, vamos a la pantalla de introducción del primer nivel
     showLevelIntro();
 }
 
@@ -54,12 +52,15 @@ function setupLevel() {
     gameState.boardLocked = false;
     dom.gameBoard.innerHTML = '';
 
-    const levelData = gameConfig.levels[gameState.currentLevel];
-    if (!levelData) {
+    // CAMBIO: La lógica ahora elige una pregunta aleatoria del array del nivel
+    const levelArray = gameConfig.levels[gameState.currentLevel];
+    if (!levelArray) {
         winGame();
         return;
     }
+    const levelData = levelArray[Math.floor(Math.random() * levelArray.length)];
     
+    // El resto de la función sigue igual, trabajando con el 'levelData' seleccionado
     let correctItems = [];
     let displayItems = [];
     
@@ -136,14 +137,19 @@ function createBlock(item) {
 function handleBlockClick(blockElement, blockValue) {
     if (gameState.boardLocked || blockElement.classList.contains('used')) return;
 
-    const levelData = gameConfig.levels[gameState.currentLevel];
+    // Para obtener el tipo de nivel, necesitamos volver a seleccionar una pregunta (o guardarla)
+    // Manera sencilla: simplemente coger la primera pregunta del nivel para saber el tipo
+    const levelType = gameConfig.levels[gameState.currentLevel][0].type;
+    const levelColor = gameConfig.levels[gameState.currentLevel][0].color;
+
+
     let expectedValue = gameState.sequence[gameState.currentStep];
     if (typeof expectedValue === 'object') expectedValue = expectedValue.answer;
 
     let isCorrect = false;
-    if (levelData.type === 'color_find') {
-        if (blockValue === levelData.color) isCorrect = true;
-    } else if (levelData.type === 'color_sequence') {
+    if (levelType === 'color_find') {
+        if (blockValue === levelColor) isCorrect = true;
+    } else if (levelType === 'color_sequence') {
         if (blockValue === expectedValue) isCorrect = true;
     } else {
         if (blockValue === expectedValue) isCorrect = true;
@@ -230,8 +236,10 @@ function showLevelIntro() {
     dom.gameBoard.style.justifyContent = 'center';
     dom.gameBoard.style.alignItems = 'center';
 
-    const levelData = gameConfig.levels[gameState.currentLevel];
-    dom.messageBar.textContent = levelData.message;
+    // CAMBIO: Obtener el mensaje de una pregunta aleatoria para mostrarlo
+    const levelArray = gameConfig.levels[gameState.currentLevel];
+    const randomQuestionForIntro = levelArray[Math.floor(Math.random() * levelArray.length)];
+    dom.messageBar.textContent = randomQuestionForIntro.message;
     dom.levelDisplay.textContent = `Maila: ${gameState.currentLevel + 1}`;
 
     const startButton = document.createElement('button');
@@ -403,12 +411,10 @@ function toggleMusic() {
 // --- JOKOAREN HASIERA ---
 window.onload = () => {
     dom.musicToggleBtn.addEventListener('click', toggleMusic);
-    // CAMBIO: Añadir listener para el nuevo botón de reinicio
     dom.restartBtn.addEventListener('click', startGame);
 
     showModal('Zenbakien Jauziak', 'Jolasten Hasi!', async () => {
         await Tone.start();
-        // CAMBIO: El juego ahora empieza con la intro del nivel 1
         showLevelIntro();
     });
 
