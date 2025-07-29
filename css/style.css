@@ -265,23 +265,24 @@ body {
     box-shadow: 0 2px 0 #a11a17;
 }
 
+/* CAMBIO: Animación de canasta rediseñada para ser responsive */
 #levelup-animation {
     display: none;
-    height: 300px;
-    width: 100%;
-    max-width: 400px;
+    width: 90vw; /* Ocupa el 90% del ancho de la pantalla */
+    max-width: 450px; /* Límite para pantallas grandes */
+    aspect-ratio: 1 / 1; /* Mantiene la proporción cuadrada */
     position: relative;
     margin-bottom: 20px;
     perspective: 800px;
 }
 #backboard {
-    width: 150px;
-    height: 110px;
+    width: 38%;
+    height: 28%;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
     border: 5px solid #333;
     position: absolute;
-    bottom: 100px;
+    bottom: 30%;
     left: 50%;
     transform: translateX(-50%);
     box-shadow: 0 10px 20px rgba(0,0,0,0.3);
@@ -289,22 +290,22 @@ body {
 #backboard::before {
     content: '';
     position: absolute;
-    width: 60px;
-    height: 45px;
+    width: 40%;
+    height: 40%;
     border: 4px solid var(--mario-red);
     border-top: none;
     left: 50%;
-    bottom: 10px;
+    bottom: 10%;
     transform: translateX(-50%);
 }
 #hoop {
-    width: 100px;
-    height: 50px;
+    width: 28%;
+    height: 12%;
     border: 8px solid #E52521;
     border-bottom: none;
     border-radius: 50% 50% 0 0;
     position: absolute;
-    bottom: 80px;
+    bottom: 25%;
     left: 50%;
     transform: translateX(-50%) rotateX(70deg);
     z-index: 3;
@@ -312,10 +313,10 @@ body {
 #hoop::after {
     content: '';
     position: absolute;
-    bottom: -50px;
+    bottom: -100%;
     left: 5px;
     right: 5px;
-    height: 50px;
+    height: 100%;
     background-image: 
         repeating-linear-gradient(45deg, white, white 2px, transparent 2px, transparent 10px),
         repeating-linear-gradient(-45deg, white, white 2px, transparent 2px, transparent 10px);
@@ -326,8 +327,8 @@ body {
     animation: net-stretch-animation 0.4s ease-out 1s;
 }
 #basketball {
-    width: 50px;
-    height: 50px;
+    width: 12%;
+    height: 12%;
     background: radial-gradient(circle at 30% 30%, #fd9a4a, #e67e22);
     border-radius: 50%;
     position: absolute;
@@ -343,7 +344,7 @@ body {
 
 #sparkle-container {
     position: absolute;
-    top: 65%;
+    top: 72%;
     left: 50%;
     width: 1px;
     height: 1px;
@@ -363,12 +364,13 @@ body {
     50% { transform: translateY(-20px); }
     100% { transform: translateY(0); }
 }
+/* CAMBIO: Animación del balón con porcentajes */
 @keyframes ball-pro-arc-animation {
-    0% { left: 0; top: 200px; opacity: 1; transform: scale(0.7) rotate(0deg); animation-timing-function: cubic-bezier(0.3, 0.27, 0.07, 1.0); }
-    35% { top: 0px; transform: scale(1) rotate(200deg); }
-    55% { left: 50%; top: 130px; transform: translateX(-50%) scale(1.1) rotate(360deg); animation-timing-function: ease-in; }
-    70% { top: 90px; transform: translateX(-50%) scale(1) rotate(400deg); animation-timing-function: ease-out; }
-    100% { top: 300px; opacity: 0; transform: translateX(-50%) scale(0.9) rotate(500deg); }
+    0% { left: 0%; top: 60%; opacity: 1; transform: scale(0.7) rotate(0deg); animation-timing-function: cubic-bezier(0.3, 0.27, 0.07, 1.0); }
+    35% { top: -5%; transform: scale(1) rotate(200deg); }
+    55% { left: 50%; top: 48%; transform: translateX(-50%) scale(1.1) rotate(360deg); animation-timing-function: ease-in; }
+    70% { top: 35%; transform: translateX(-50%) scale(1) rotate(400deg); animation-timing-function: ease-out; }
+    100% { top: 110%; opacity: 0; transform: translateX(-50%) scale(0.9) rotate(500deg); }
 }
 @keyframes net-stretch-animation {
     0%, 100% { transform: scaleY(1); }
