@@ -2,7 +2,9 @@
 <html lang="eu">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Zenbakien Jauziak Mariorekin</title>
     
     <!-- Enlace a la hoja de estilos CSS -->
@@ -24,15 +26,13 @@
 
         <div id="status-bar">
             <div class="status-item" id="level-display">Maila: 1</div>
-            <div class="status-item" id="lives-display">
-                <span class="heart">❤</span><span class="heart">❤</span><span class="heart">❤</span>
-            </div>
+            <div class="status-item" id="lives-display"></div>
             <div class="status-item" id="controls">
                 <button id="music-toggle-btn">🔊</button>
                 <button id="restart-btn">↻</button>
             </div>
         </div>
-        <div id="message-bar">Ongi etorri! Egin klik blokeetan ordenan.</div>
+        <div id="message-bar">Ongi etorri!</div>
         <div id="game-board"></div>
         <div id="mario"></div>
     </div>
@@ -43,10 +43,9 @@
                 <div id="backboard"></div>
                 <div id="basketball"></div>
                 <div id="hoop"></div>
-                <div id="confetti-container"></div>
+                <div id="sparkle-container"></div>
             </div>
             <div id="modal-message"></div>
-            <!-- CAMBIO: Contenedor para uno o varios botones -->
             <div id="modal-button-container"></div>
         </div>
     </div>
