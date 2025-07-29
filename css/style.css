@@ -50,7 +50,7 @@ body {
 #logo {
     max-width: 80%;
     height: auto;
-    max-height: 100px;
+    max-height: 150px; 
 }
 
 /* Barra de mensajes e instrucciones */
@@ -100,7 +100,6 @@ body {
 /* Tablero de juego con los bloques */
 #game-board {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--block-size), 1fr));
     gap: 20px;
     width: 100%;
     padding: 20px;
@@ -110,36 +109,51 @@ body {
 
 /* Estilo de los bloques '?' */
 .block {
-    width: var(--block-size);
-    height: var(--block-size);
+    width: 100%; 
+    padding-bottom: 100%;
+    position: relative;
+    cursor: pointer;
+}
+.block-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: var(--mario-yellow);
     border: 5px solid var(--mario-brown);
     border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: clamp(1.8rem, 5vw, 2.5rem);
     color: white;
     text-shadow: 2px 2px 2px rgba(0,0,0,0.7);
-    cursor: pointer;
-    position: relative;
     box-shadow: inset -4px -4px 0px 0px rgba(0,0,0,0.2);
     transition: transform 0.1s, background-color 0.2s;
 }
-.block:active {
+.block:active .block-inner {
     transform: translateY(2px);
 }
-.block.correct {
+.block.correct .block-inner {
     animation: correct-jump 0.3s ease-out;
 }
-.block.used {
+.block.used .block-inner {
     opacity: 0.5;
+}
+.block.used {
     cursor: not-allowed;
 }
+
 .block-content {
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
     position: relative;
     z-index: 1;
+    transition: font-size 0.2s;
 }
+.block-content.small-font {
+    font-size: clamp(1.4rem, 6vw, 1.9rem);
+}
+
 
 /* Personaje de Mario */
 #mario {
@@ -164,7 +178,7 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
-    display: none; /* Oculto por defecto */
+    display: none;
     justify-content: center;
     align-items: center;
     z-index: 100;
@@ -200,13 +214,14 @@ body {
     box-shadow: 0 2px 0 #2E8B57;
 }
 
-/* Animación de encestar */
+/* Animación de encestar mejorada */
 #levelup-animation {
     display: none;
-    height: 180px;
+    height: 220px; /* Más altura para la animación */
     width: 100%;
     position: relative;
     margin-bottom: 20px;
+    perspective: 500px; /* Añadido para efectos 3D */
 }
 #hoop {
     width: 100px;
@@ -215,9 +230,10 @@ body {
     border-bottom: none;
     border-radius: 50% 50% 0 0;
     position: absolute;
-    bottom: 20px;
+    bottom: 40px;
     left: 50%;
-    transform: translateX(-50%) perspective(150px) rotateX(60deg);
+    transform: translateX(-50%) rotateX(60deg);
+    z-index: 2;
 }
 #hoop::after {
     content: '';
@@ -229,6 +245,10 @@ body {
     background-image: 
         repeating-linear-gradient(45deg, white, white 2px, transparent 2px, transparent 10px),
         repeating-linear-gradient(-45deg, white, white 2px, transparent 2px, transparent 10px);
+    transform-origin: top;
+}
+#levelup-animation.play #hoop::after {
+    animation: net-stretch-animation 0.5s ease-out 0.7s;
 }
 #basketball {
     width: 50px;
@@ -236,12 +256,29 @@ body {
     background-color: #E67E22;
     border-radius: 50%;
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: -60px;
+    left: 0;
+    top: 0;
+    opacity: 0;
 }
 #levelup-animation.play #basketball {
-    animation: swoosh-animation 1.5s ease-in-out forwards;
+    animation: ball-arc-animation 1.5s cubic-bezier(0.3, 0.0, 0.8, 0.15) forwards;
+}
+
+/* Contenedor y estilos para el confeti */
+#confetti-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1px;
+    height: 1px;
+}
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: var(--color);
+    opacity: 0;
+    animation: confetti-blast 1.2s ease-out forwards;
 }
 
 /* Animaciones */
@@ -250,9 +287,17 @@ body {
     50% { transform: translateY(-20px); }
     100% { transform: translateY(0); }
 }
-@keyframes swoosh-animation {
-    0% { top: -60px; transform: translateX(-50%) rotate(0deg); }
-    50% { transform: translateX(-50%) rotate(180deg); }
-    100% { top: 100px; transform: translateX(-50%) rotate(360deg); }
+@keyframes ball-arc-animation {
+    0% { left: 0; top: 100px; opacity: 1; transform: scale(0.8) rotate(0deg); }
+    30% { top: -20px; transform: scale(1) rotate(180deg); }
+    80% { left: 50%; top: 130px; transform: translateX(-50%) scale(1) rotate(360deg); }
+    100% { left: 50%; top: 250px; opacity: 0; transform: translateX(-50%) scale(0.9) rotate(400deg); }
 }
-
+@keyframes net-stretch-animation {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(1.4); }
+}
+@keyframes confetti-blast {
+    0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)) rotate(360deg); opacity: 0; }
+}
