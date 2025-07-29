@@ -26,7 +26,8 @@
           Ziurtatu 'logo_jakes.png' 'assets' karpetan dagoela.
         -->
         <div id="logo-container">
-            <img id="logo" src="assets/logo_jakes.png" alt="Jokoaren Logoa" onerror="this.style.display='none'">
+            <!-- CAMBIO: Añadido un 'onerror' mejorado para ayudarte a depurar si el logo no se encuentra. -->
+            <img id="logo" src="assets/logo_jakes.png" alt="Jokoaren Logoa" onerror="this.onerror=null; this.src='https://placehold.co/300x150/E52521/FFFFFF?text=Logo+ez+da+aurkitu';">
         </div>
 
         <div id="status-bar">
@@ -48,7 +49,6 @@
             <div id="levelup-animation">
                 <div id="basketball"></div>
                 <div id="hoop"></div>
-                <!-- CAMBIO: Contenedor para el confeti -->
                 <div id="confetti-container"></div>
             </div>
             <div id="modal-message"></div>
