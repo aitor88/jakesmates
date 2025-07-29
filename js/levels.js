@@ -14,46 +14,45 @@ const colorNames = Object.keys(colorMap);
 const gameConfig = {
     initialLives: 3,
     levels: [
-        // 1. MAILA
+        // 1. MAILA (2x2)
         [
-            { type: 'sequence', values: [1, 2, 3], distractors: 3, message: 'Jarraitu sekuentzia: 1, 2, 3' },
-            { type: 'sequence', values: [2, 3, 4], distractors: 3, message: 'Jarraitu sekuentzia: 2, 3, 4' },
-            { type: 'color_find', color: 'GORRIA', count: 3, distractors: 3, message: 'Aurkitu 3 bloke GORRI' },
-            { type: 'sequence', values: [1, 2], distractors: 4, message: 'Jarraitu sekuentzia: 1, 2' },
-            { type: 'color_find', color: 'URDINA', count: 3, distractors: 3, message: 'Aurkitu 3 bloke URDIN' }
+            { type: 'sequence', values: [1, 2], distractors: 2, message: 'Jarraitu sekuentzia: 1, 2' },
+            { type: 'color_find', color: 'GORRIA', count: 2, distractors: 2, message: 'Aurkitu 2 bloke GORRI' },
+            { type: 'sequence', values: [3, 4], distractors: 2, message: 'Jarraitu sekuentzia: 3, 4' },
+            { type: 'color_find', color: 'URDINA', count: 2, distractors: 2, message: 'Aurkitu 2 bloke URDIN' },
+            { type: 'addition', count: 1, maxNum: 2, distractors: 3, message: 'Ebatzi gehiketa' }
         ],
-        // 2. MAILA
+        // 2. MAILA (2x2)
         [
-            { type: 'sequence', values: [1, 2, 3, 4], distractors: 3, message: 'Jarraitu sekuentzia: 1...4' },
-            { type: 'sequence', values: [3, 4, 5], distractors: 4, message: 'Jarraitu sekuentzia: 3, 4, 5' },
-            { type: 'color_find', color: 'BERDEA', count: 4, distractors: 3, message: 'Aurkitu 4 bloke BERDE' },
-            { type: 'sequence', values: [5, 6, 7], distractors: 4, message: 'Jarraitu sekuentzia: 5, 6, 7' },
-            { type: 'color_find', color: 'HORIA', count: 4, distractors: 4, message: 'Aurkitu 4 bloke HORI' }
+            { type: 'sequence', values: [1, 2, 3], distractors: 1, message: 'Jarraitu sekuentzia: 1, 2, 3' },
+            { type: 'sequence', values: [4, 3, 2], distractors: 1, message: 'Atzerantz: 4, 3, 2' },
+            { type: 'color_find', color: 'BERDEA', count: 3, distractors: 1, message: 'Aurkitu 3 bloke BERDE' },
+            { type: 'even', count: 2, max: 4, distractors: 2, message: 'Aukeratu zenbaki BIKOITIAK' },
+            { type: 'odd', count: 2, max: 5, distractors: 2, message: 'Aukeratu zenbaki BAKOITIAK' }
         ],
-        // 3. MAILA
+        // 3. MAILA (3x3)
         [
-            { type: 'even', count: 4, max: 8, distractors: 3, message: 'Aukeratu zenbaki BIKOITIAK' },
-            { type: 'odd', count: 4, max: 8, distractors: 3, message: 'Aukeratu zenbaki BAKOITIAK' },
-            { type: 'sequence', values: [5, 4, 3], distractors: 4, message: 'Atzerantz: 5, 4, 3' },
-            { type: 'even', count: 3, max: 10, distractors: 4, message: 'Aukeratu 3 zenbaki BIKOITI' },
-            { type: 'odd', count: 3, max: 10, distractors: 4, message: 'Aukeratu 3 zenbaki BAKOITI' }
+            { type: 'sequence', values: [1, 2, 3, 4], distractors: 5, message: 'Jarraitu sekuentzia: 1...4' },
+            { type: 'color_find', color: 'HORIA', count: 4, distractors: 5, message: 'Aurkitu 4 bloke HORI' },
+            { type: 'addition', count: 3, maxNum: 4, distractors: 6, message: 'Ebatzi 3 gehiketa' },
+            { type: 'sequence', values: [5, 6, 7], distractors: 6, message: 'Jarraitu sekuentzia: 5, 6, 7' },
+            { type: 'subtraction', count: 3, maxNum: 5, distractors: 6, message: 'Ebatzi 3 kenketa' }
         ],
-        // ... (y así sucesivamente hasta 30 niveles)
-        // 4. MAILA
+        // 4. MAILA (3x3)
         [
-            { type: 'addition', count: 3, maxNum: 3, distractors: 3, message: 'Ebatzi gehiketak' },
-            { type: 'sequence', values: [6, 7, 8, 9], distractors: 4, message: 'Jarraitu sekuentzia: 6...9' },
-            { type: 'color_sequence', values: ['GORRIA', 'URDINA'], distractors: 4, message: 'Jarraitu koloreak' },
-            { type: 'addition', count: 3, maxNum: 4, distractors: 4, message: 'Ebatzi gehiketak' },
-            { type: 'sequence', values: [8, 7, 6], distractors: 5, message: 'Atzerantz: 8, 7, 6' }
+            { type: 'even', count: 5, max: 10, distractors: 4, message: 'Aukeratu 5 zenbaki BIKOITI' },
+            { type: 'odd', count: 5, max: 11, distractors: 4, message: 'Aukeratu 5 zenbaki BAKOITI' },
+            { type: 'sequence', values: [8, 7, 6, 5], distractors: 5, message: 'Atzerantz: 8...5' },
+            { type: 'color_sequence', values: ['GORRIA', 'URDINA', 'BERDEA'], distractors: 6, message: 'Jarraitu koloreak' },
+            { type: 'sequence_by', start: 2, step: 2, count: 4, distractors: 5, message: '2tik 2ra: 2, 4, 6, 8' }
         ],
-        // 5. MAILA
+        // 5. MAILA (3x3)
         [
-            { type: 'sequence_by', start: 2, step: 2, count: 3, distractors: 3, message: '2tik 2ra: 2, 4, 6' },
-            { type: 'color_sequence', values: ['BERDEA', 'HORIA', 'BERDEA'], distractors: 4, message: 'Jarraitu koloreak' },
-            { type: 'subtraction', count: 3, maxNum: 5, distractors: 3, message: 'Ebatzi kenketak' },
-            { type: 'sequence_by', start: 10, step: 10, count: 3, distractors: 3, message: '10etik 10era: 10, 20, 30' },
-            { type: 'subtraction', count: 3, maxNum: 6, distractors: 4, message: 'Ebatzi kenketak' }
+            { type: 'addition', count: 4, maxNum: 6, distractors: 5, message: 'Ebatzi 4 gehiketa' },
+            { type: 'subtraction', count: 4, maxNum: 8, distractors: 5, message: 'Ebatzi 4 kenketa' },
+            { type: 'sequence', values: [10, 11, 12, 13], distractors: 5, message: 'Jarraitu sekuentzia: 10...13' },
+            { type: 'sequence_by', start: 10, step: 10, count: 4, distractors: 5, message: '10etik 10era: 10...40' },
+            { type: 'color_find', color: 'MOREA', count: 5, distractors: 4, message: 'Aurkitu 5 bloke MORE' }
         ],
         // 6. MAILA
         [
@@ -87,13 +86,13 @@ const gameConfig = {
             { type: 'odd', count: 5, max: 20, distractors: 4, message: 'Aukeratu zenbaki BAKOITIAK' },
             { type: 'mixed_ops', count: 4, maxNum: 8, distractors: 5, message: 'Nahastuta: Ebatzi eragiketak' }
         ],
-        // 10. MAILA
+        // 10. MAILA (4x4)
         [
-            { type: 'color_sequence', values: ['GORRIA', 'URDINA', 'BERDEA', 'HORIA'], distractors: 4, message: 'Jarraitu kolore sekuentzia' },
-            { type: 'sequence', values: [20, 19, 18, 17], distractors: 5, message: 'Atzerantz: 20...17' },
-            { type: 'sequence_by', start: 10, step: 10, count: 4, distractors: 4, message: '10etik 10era: 10...40' },
-            { type: 'color_sequence', values: ['URDINA', 'HORIA', 'URDINA', 'GORRIA'], distractors: 4, message: 'Jarraitu kolore sekuentzia' },
-            { type: 'sequence', values: [18, 19, 20], distractors: 6, message: 'Jarraitu sekuentzia: 18, 19, 20' }
+            { type: 'mixed_ops', count: 6, maxNum: 10, distractors: 10, message: 'Nahastuta: Ebatzi 6 eragiketa' },
+            { type: 'sequence', values: [20, 19, 18, 17, 16], distractors: 11, message: 'Atzerantz: 20...16' },
+            { type: 'even', count: 8, max: 16, distractors: 8, message: 'Aukeratu 8 zenbaki BIKOITI' },
+            { type: 'odd', count: 8, max: 17, distractors: 8, message: 'Aukeratu 8 zenbaki BAKOITI' },
+            { type: 'color_sequence', values: ['GORRIA', 'URDINA', 'GORRIA', 'URDINA', 'BERDEA'], distractors: 11, message: 'Jarraitu kolore sekuentzia' }
         ],
         // 11. MAILA
         [
@@ -127,13 +126,13 @@ const gameConfig = {
             { type: 'mixed_ops', count: 6, maxNum: 8, distractors: 4, message: 'Nahastuta: Ebatzi 6 eragiketa' },
             { type: 'color_find', color: 'URDINA', count: 7, distractors: 3, message: 'Aurkitu 7 bloke URDIN' }
         ],
-        // 15. MAILA
+        // 15. MAILA (4x4)
         [
-            { type: 'sequence_by', start: 10, step: 10, count: 5, distractors: 4, message: '10etik 10era: 10...50' },
-            { type: 'sequence', values: [25, 26, 27, 28], distractors: 6, message: 'Jarraitu sekuentzia: 25...28' },
-            { type: 'addition', count: 6, maxNum: 10, distractors: 4, message: 'Ebatzi 6 gehiketa' },
-            { type: 'subtraction', count: 6, maxNum: 15, distractors: 4, message: 'Ebatzi 6 kenketa' },
-            { type: 'sequence_by', start: 5, step: 5, count: 5, distractors: 5, message: '5etik 5era: 5...25' }
+            { type: 'addition', count: 7, maxNum: 15, distractors: 9, message: 'Ebatzi 7 gehiketa' },
+            { type: 'subtraction', count: 7, maxNum: 20, distractors: 9, message: 'Ebatzi 7 kenketa' },
+            { type: 'sequence_by', start: 3, step: 3, count: 6, distractors: 10, message: '3tik 3ra: 3...18' },
+            { type: 'sequence', values: [30, 31, 32, 33, 34, 35], distractors: 10, message: 'Jarraitu sekuentzia: 30...35' },
+            { type: 'mixed_ops', count: 8, maxNum: 12, distractors: 8, message: 'Nahastuta: Ebatzi 8 eragiketa' }
         ],
         // 16. MAILA
         [
@@ -167,13 +166,13 @@ const gameConfig = {
             { type: 'subtraction', count: 8, maxNum: 20, distractors: 4, message: 'Ebatzi 8 kenketa' },
             { type: 'sequence', values: [60, 59, 58], distractors: 9, message: 'Atzerantz: 60, 59, 58' }
         ],
-        // 20. MAILA
+        // 20. MAILA (5x5)
         [
-            { type: 'mixed_ops', count: 8, maxNum: 15, distractors: 4, message: 'Azken erronka: 8 eragiketa' },
-            { type: 'sequence', values: [70, 71, 72, 73], distractors: 8, message: 'Jarraitu sekuentzia: 70...73' },
-            { type: 'color_sequence', values: ['GORRIA', 'BERDEA', 'URDINA', 'HORIA', 'MOREA'], distractors: 7, message: 'Jarraitu kolore guztiak' },
-            { type: 'sequence_by', start: 100, step: -10, count: 5, distractors: 7, message: 'Atzerantz 10etik 10era' },
-            { type: 'mixed_ops', count: 8, maxNum: 16, distractors: 5, message: 'Azken erronka: 8 eragiketa' }
+            { type: 'sequence', values: [50, 49, 48, 47, 46, 45], distractors: 19, message: 'Atzerantz: 50...45' },
+            { type: 'even', count: 12, max: 24, distractors: 13, message: 'Aukeratu 12 zenbaki BIKOITI' },
+            { type: 'odd', count: 12, max: 25, distractors: 13, message: 'Aukeratu 12 zenbaki BAKOITI' },
+            { type: 'mixed_ops', count: 10, maxNum: 25, distractors: 15, message: 'Nahastuta: Ebatzi 10 eragiketa' },
+            { type: 'sequence_by', start: 100, step: -10, count: 7, distractors: 18, message: 'Atzerantz 10etik 10era' }
         ],
         // 21. MAILA
         [
@@ -207,7 +206,7 @@ const gameConfig = {
             { type: 'even', count: 12, max: 24, distractors: 4, message: 'Aukeratu 12 zenbaki BIKOITI' },
             { type: 'odd', count: 12, max: 25, distractors: 4, message: 'Aukeratu 12 zenbaki BAKOITI' }
         ],
-        // 25. MAILA
+        // 25. MAILA (5x5)
         [
             { type: 'mixed_ops', count: 10, maxNum: 20, distractors: 6, message: 'Nahastuta: 10 eragiketa' },
             { type: 'sequence', values: [101, 102, 103], distractors: 10, message: 'Jarraitu sekuentzia: 101, 102, 103' },
@@ -247,13 +246,13 @@ const gameConfig = {
             { type: 'odd', count: 15, max: 31, distractors: 1, message: 'Aukeratu 15 zenbaki BAKOITI' },
             { type: 'mixed_ops', count: 15, maxNum: 25, distractors: 1, message: 'Nahastuta: 15 eragiketa' }
         ],
-        // 30. MAILA
+        // 30. MAILA (6x6)
         [
-            { type: 'sequence', values: [200, 199, 198, 197, 196], distractors: 10, message: 'Azkena! Atzerantz: 200...196' },
-            { type: 'mixed_ops', count: 16, maxNum: 30, distractors: 0, message: 'Azken erronka: 16 eragiketa' },
-            { type: 'sequence_by', start: 100, step: 100, count: 4, distractors: 12, message: '100etik 100era: 100...400' },
-            { type: 'color_sequence', values: ['GORRIA', 'URDINA', 'BERDEA', 'HORIA', 'LARANJA', 'MOREA'], distractors: 10, message: 'Kolore guztiak!' },
-            { type: 'sequence', values: [500, 499, 498], distractors: 13, message: 'Azkena! Atzerantz: 500, 499, 498' }
+            { type: 'mixed_ops', count: 16, maxNum: 50, distractors: 20, message: 'Azken erronka: 16 eragiketa' },
+            { type: 'sequence', values: [200, 199, 198, 197, 196, 195], distractors: 30, message: 'Atzerantz: 200...195' },
+            { type: 'even', count: 18, max: 40, distractors: 18, message: 'Aukeratu 18 zenbaki BIKOITI' },
+            { type: 'odd', count: 18, max: 41, distractors: 18, message: 'Aukeratu 18 zenbaki BAKOITI' },
+            { type: 'sequence_by', start: 25, step: 25, count: 8, distractors: 28, message: '25etik 25era: 25...200' }
         ]
     ]
 };
