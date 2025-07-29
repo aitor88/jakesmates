@@ -178,21 +178,32 @@ function handleWrongClick() {
     }
 }
 
+// CAMBIO: Función levelUp mejorada para controlar la nueva animación
 function levelUp() {
     gameState.currentLevel++;
     
     dom.modal.style.display = 'flex';
     dom.modalMessage.style.display = 'none';
     dom.modalButton.style.display = 'none';
+    dom.modalMessage.classList.remove('visible');
+    dom.modalButton.classList.remove('visible');
 
     dom.levelupAnimation.style.display = 'block';
     dom.levelupAnimation.classList.add('play');
 
-    sounds.swoosh.triggerAttack(Tone.now() + 0.7);
-    sounds.levelUp.triggerAttackRelease('C5', '0.4', Tone.now() + 0.8);
-    
-    setTimeout(createConfetti, 800);
+    // Sincronizar sonidos y efectos con la animación
+    setTimeout(() => {
+        dom.modalContent.classList.add('shake');
+        sounds.swoosh.triggerAttack();
+    }, 900);
 
+    setTimeout(() => {
+        dom.modalContent.classList.remove('shake');
+        createSparkles();
+        sounds.levelUp.triggerAttackRelease('C5', '0.4');
+    }, 1200);
+
+    // Mostrar el mensaje y el botón después de la animación
     setTimeout(() => {
         dom.levelupAnimation.style.display = 'none';
         dom.levelupAnimation.classList.remove('play');
@@ -201,6 +212,8 @@ function levelUp() {
         dom.modalButton.textContent = 'Hurrengo Maila';
         dom.modalMessage.style.display = 'block';
         dom.modalButton.style.display = 'block';
+        dom.modalMessage.classList.add('visible');
+        dom.modalButton.classList.add('visible');
 
         dom.modalButton.onclick = () => {
             hideModal();
@@ -210,7 +223,7 @@ function levelUp() {
                  winGame();
             }
         };
-    }, 2000);
+    }, 2500);
 }
 
 function gameOver() {
@@ -223,37 +236,35 @@ function winGame() {
 
 // --- FUNTZIO LAGUNTZAILEAK ---
 
-function createConfetti() {
+// CAMBIO: Función renombrada y mejorada para crear destellos
+function createSparkles() {
     dom.confettiContainer.innerHTML = '';
-    const confettiCount = 30;
-    const confettiColors = ['#E52521', '#3A5CFF', '#F7B000', '#4CAF50', '#FFFFFF'];
+    const sparkleCount = 40;
+    const sparkleColors = ['#F7B000', '#FFFFFF', '#FFA500'];
     
     sounds.confetti.triggerAttackRelease('C6', '0.2');
 
-    for (let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement('div');
-        confetti.classList.add('confetti');
+    for (let i = 0; i < sparkleCount; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.classList.add('sparkle');
         
-        const x = (Math.random() - 0.5) * 300;
-        const y = (Math.random() - 0.5) * 300;
+        const angle = Math.random() * 360;
+        const distance = Math.random() * 100 + 50;
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
         
-        confetti.style.setProperty('--x', `${x}px`);
-        confetti.style.setProperty('--y', `${y}px`);
-        confetti.style.setProperty('--color', confettiColors[Math.floor(Math.random() * confettiColors.length)]);
-        confetti.style.animationDelay = `${Math.random() * 0.2}s`;
+        sparkle.style.setProperty('--x', `${x}px`);
+        sparkle.style.setProperty('--y', `${y}px`);
+        sparkle.style.setProperty('--color', sparkleColors[Math.floor(Math.random() * sparkleColors.length)]);
+        sparkle.style.animationDelay = `${Math.random() * 0.2}s`;
+        sparkle.style.width = `${Math.random() * 8 + 4}px`;
+        sparkle.style.height = sparkle.style.width;
         
-        dom.confettiContainer.appendChild(confetti);
+        dom.confettiContainer.appendChild(sparkle);
     }
 }
 
-/**
- * CAMBIO: Lógica mejorada para crear siempre una cuadrícula cuadrada (NxN).
- */
 function setGridColumns(itemCount) {
-    // Calcula la raíz cuadrada y la redondea hacia arriba para obtener el tamaño del lado.
-    // Ej: 9 items -> sqrt(9) = 3 -> 3x3.
-    // Ej: 10 items -> sqrt(10) = 3.16 -> ceil = 4 -> 4x4.
-    // Esto asegura una cuadrícula cuadrada que siempre es simétrica.
     const cols = Math.ceil(Math.sqrt(itemCount));
     dom.gameBoard.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
 }
@@ -277,9 +288,14 @@ function showModal(message, buttonText, buttonAction) {
     dom.levelupAnimation.style.display = 'none';
     dom.modalMessage.style.display = 'block';
     dom.modalButton.style.display = 'block';
+    dom.modalMessage.classList.remove('visible');
+    dom.modalButton.classList.remove('visible');
     
     dom.modalMessage.textContent = message;
     dom.modalButton.textContent = buttonText;
+    dom.modalMessage.classList.add('visible');
+    dom.modalButton.classList.add('visible');
+    
     dom.modalButton.onclick = () => {
         hideModal();
         buttonAction();
