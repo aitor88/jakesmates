@@ -21,7 +21,7 @@ const dom = {
     modalMessage: document.getElementById('modal-message'),
     modalButtonContainer: document.getElementById('modal-button-container'),
     levelupAnimation: document.getElementById('levelup-animation'),
-    confettiContainer: document.getElementById('confetti-container'),
+    sparkleContainer: document.getElementById('sparkle-container'),
     musicToggleBtn: document.getElementById('music-toggle-btn'),
     backgroundMusic: document.getElementById('background-music'),
     restartBtn: document.getElementById('restart-btn')
@@ -35,7 +35,7 @@ const sounds = {
     levelUp: new Tone.Synth({ oscillator: { type: 'sawtooth' }, envelope: { attack: 0.01, decay: 0.4, sustain: 0, release: 0.1 } }).toDestination(),
     gameOver: new Tone.Synth({ oscillator: { type: 'fmsquare' }, envelope: { attack: 0.1, decay: 0.8, sustain: 0, release: 0.1 } }).toDestination(),
     swoosh: new Tone.NoiseSynth({ noise: { type: 'white' }, envelope: { attack: 0.005, decay: 0.2, sustain: 0 } }).toDestination(),
-    confetti: new Tone.Synth({ oscillator: { type: 'fmsine' }, envelope: { attack: 0.01, decay: 0.3, sustain: 0, release: 0.1 } }).toDestination()
+    sparkle: new Tone.Synth({ oscillator: { type: 'fmsine' }, envelope: { attack: 0.01, decay: 0.3, sustain: 0, release: 0.1 } }).toDestination()
 };
 
 // --- LOGIKA NAGUSIA ---
@@ -174,12 +174,18 @@ function handleCorrectClick(blockElement) {
 
 function handleWrongClick() {
     sounds.wrong.triggerAttackRelease('C3', '0.5');
-    gameState.lives--;
-    updateLivesDisplay();
-    if (gameState.lives <= 0) {
-        gameState.boardLocked = true;
-        setTimeout(gameOver, 500);
-    }
+    gameState.boardLocked = true; // Bloquear el tablero mientras se muestra el modal
+    showModal({
+        message: 'Erantzun okerra!',
+        buttons: [{ text: 'Jarraitu', action: () => {
+            gameState.lives--;
+            updateLivesDisplay();
+            gameState.boardLocked = false;
+            if (gameState.lives <= 0) {
+                setTimeout(gameOver, 100);
+            }
+        }, class: 'cancel' }]
+    });
 }
 
 function levelUp() {
@@ -220,18 +226,18 @@ function confirmRestart() {
 }
 
 function createSparkles() {
-    dom.confettiContainer.innerHTML = '';
+    dom.sparkleContainer.innerHTML = '';
     const sparkleCount = 40;
     const sparkleColors = ['#F7B000', '#FFFFFF', '#FFA500'];
     
-    sounds.confetti.triggerAttackRelease('C6', '0.2');
+    sounds.sparkle.triggerAttackRelease('C6', '0.2');
 
     for (let i = 0; i < sparkleCount; i++) {
         const sparkle = document.createElement('div');
         sparkle.classList.add('sparkle');
         
         const angle = Math.random() * 360;
-        const distance = Math.random() * 100 + 50;
+        const distance = Math.random() * 120 + 50;
         const x = Math.cos(angle) * distance;
         const y = Math.sin(angle) * distance;
         
@@ -242,7 +248,7 @@ function createSparkles() {
         sparkle.style.width = `${Math.random() * 8 + 4}px`;
         sparkle.style.height = sparkle.style.width;
         
-        dom.confettiContainer.appendChild(sparkle);
+        dom.sparkleContainer.appendChild(sparkle);
     }
 }
 
@@ -395,7 +401,6 @@ window.onload = () => {
     dom.musicToggleBtn.addEventListener('click', toggleMusic);
     dom.restartBtn.addEventListener('click', confirmRestart);
 
-    // CAMBIO: Restaurado el botón de inicio inicial
     showModal({
         message: 'Zenbakien Jauziak',
         buttons: [{ text: 'Jolasten Hasi!', action: async () => {
