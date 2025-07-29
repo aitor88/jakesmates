@@ -12,6 +12,7 @@
 /* Estilos generales y de fondo */
 body {
     font-family: var(--font-family);
+    /* CAMBIO: Fondo con gradiente CSS, más fiable que imágenes externas */
     background: linear-gradient(to bottom, var(--sky-blue-dark) 0%, var(--sky-blue) 100%);
     margin: 0;
     padding: 0;
@@ -77,9 +78,7 @@ body {
     color: var(--mario-red);
     font-size: 1.5em;
 }
-
-/* CAMBIO: Estilos para los botones de control */
-#music-toggle-btn, #restart-btn {
+#music-toggle-btn {
     background: none;
     border: 2px solid white;
     border-radius: 50%;
@@ -91,12 +90,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0;
 }
-#restart-btn {
-    font-size: 1.8rem; /* Ajuste para que el icono se vea bien */
-}
-
 
 /* Tablero de juego con los bloques */
 #game-board {
@@ -108,7 +102,7 @@ body {
     position: relative;
 }
 
-/* Estilo de los bloques */
+/* Estilo de los bloques '?' */
 .block {
     width: 100%; 
     padding-bottom: 100%;
@@ -160,6 +154,7 @@ body {
 #mario {
     width: 60px;
     height: 80px;
+    /* CAMBIO: Enlace a la imagen de Mario corregido y más fiable. */
     background-image: url('https://www.mariowiki.com/images/1/15/SMB_Mario_Sprite.png');
     background-size: contain;
     background-repeat: no-repeat;
@@ -169,7 +164,7 @@ body {
     transform: translateX(-50%);
     transition: left 0.5s ease-in-out, bottom 0.5s ease-in-out;
     z-index: 10;
-    image-rendering: pixelated; 
+    image-rendering: pixelated; /* Para que se vea pixelado y no borroso */
 }
 
 /* Modal para mensajes de fin de juego o nivel */
@@ -194,21 +189,10 @@ body {
     max-width: 90%;
     position: relative;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-#modal-content.shake {
-    animation: screen-shake 0.3s ease-out;
 }
 #modal-message {
     font-size: 1.8rem;
     margin-bottom: 20px;
-    opacity: 0; 
-}
-#modal-message.visible {
-    animation: fade-in-up 0.5s forwards;
 }
 #modal-button {
     background-color: var(--grass-green);
@@ -221,43 +205,20 @@ body {
     cursor: pointer;
     box-shadow: 0 5px 0 #2E8B57;
     transition: transform 0.1s, box-shadow 0.1s;
-    opacity: 0; 
 }
-#modal-button.visible {
-    animation: fade-in-up 0.5s 0.2s forwards;
+#modal-button:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #2E8B57;
 }
 
-/* Animación de encestar profesional */
+/* Animación de encestar mejorada */
 #levelup-animation {
     display: none;
-    height: 250px;
+    height: 220px; 
     width: 100%;
     position: relative;
     margin-bottom: 20px;
-    perspective: 800px;
-}
-#backboard {
-    width: 150px;
-    height: 110px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 10px;
-    border: 5px solid #333;
-    position: absolute;
-    bottom: 70px;
-    left: 50%;
-    transform: translateX(-50%);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-}
-#backboard::before {
-    content: '';
-    position: absolute;
-    width: 60px;
-    height: 45px;
-    border: 4px solid var(--mario-red);
-    border-top: none;
-    left: 50%;
-    bottom: 10px;
-    transform: translateX(-50%);
+    perspective: 500px; 
 }
 #hoop {
     width: 100px;
@@ -266,10 +227,10 @@ body {
     border-bottom: none;
     border-radius: 50% 50% 0 0;
     position: absolute;
-    bottom: 50px;
+    bottom: 40px;
     left: 50%;
-    transform: translateX(-50%) rotateX(70deg);
-    z-index: 3;
+    transform: translateX(-50%) rotateX(60deg);
+    z-index: 2;
 }
 #hoop::after {
     content: '';
@@ -282,63 +243,40 @@ body {
         repeating-linear-gradient(45deg, white, white 2px, transparent 2px, transparent 10px),
         repeating-linear-gradient(-45deg, white, white 2px, transparent 2px, transparent 10px);
     transform-origin: top;
-    z-index: 1;
 }
 #levelup-animation.play #hoop::after {
-    animation: net-stretch-animation 0.4s ease-out 1s;
+    animation: net-stretch-animation 0.5s ease-out 0.7s;
 }
 #basketball {
     width: 50px;
     height: 50px;
-    background: radial-gradient(circle at 30% 30%, #fd9a4a, #e67e22);
+    background-color: #E67E22;
     border-radius: 50%;
     position: absolute;
     left: 0;
     top: 0;
     opacity: 0;
-    z-index: 2;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.4);
 }
 #levelup-animation.play #basketball {
-    animation: ball-pro-arc-animation 1.8s ease-out forwards;
+    animation: ball-arc-animation 1.5s cubic-bezier(0.3, 0.0, 0.8, 0.15) forwards;
 }
 
-/* Contenedor y estilos para el confeti/destellos */
+/* Contenedor y estilos para el confeti */
 #confetti-container {
     position: absolute;
-    top: 70%;
+    top: 50%;
     left: 50%;
     width: 1px;
     height: 1px;
-    transform: translate(-50%, -50%);
 }
-.sparkle {
+.confetti {
     position: absolute;
+    width: 10px;
+    height: 10px;
     background-color: var(--color);
-    border-radius: 50%;
     opacity: 0;
-    animation: sparkle-blast 1.5s ease-out forwards;
+    animation: confetti-blast 1.2s ease-out forwards;
 }
-
-/* Estilos para el nuevo botón "Hasi!" */
-#start-level-btn {
-    background-color: var(--grass-green);
-    color: white;
-    padding: 20px 40px;
-    border-radius: 15px;
-    border: 5px solid white;
-    font-family: var(--font-family);
-    font-size: 1.8rem;
-    cursor: pointer;
-    box-shadow: 0 8px 0 #2E8B57;
-    transition: transform 0.1s, box-shadow 0.1s;
-    animation: fade-in-up 0.5s;
-}
-#start-level-btn:active {
-    transform: translateY(5px);
-    box-shadow: 0 3px 0 #2E8B57;
-}
-
 
 /* Animaciones */
 @keyframes correct-jump {
@@ -346,28 +284,17 @@ body {
     50% { transform: translateY(-20px); }
     100% { transform: translateY(0); }
 }
-@keyframes ball-pro-arc-animation {
-    0% { left: 0; top: 150px; opacity: 1; transform: scale(0.7) rotate(0deg); animation-timing-function: cubic-bezier(0.3, 0.27, 0.07, 1.0); }
-    35% { top: -30px; transform: scale(1) rotate(200deg); }
-    55% { left: 50%; top: 100px; transform: translateX(-50%) scale(1.1) rotate(360deg); animation-timing-function: ease-in; } /* Golpe en el aro */
-    70% { top: 60px; transform: translateX(-50%) scale(1) rotate(400deg); animation-timing-function: ease-out; } /* Rebote hacia arriba */
-    100% { top: 250px; opacity: 0; transform: translateX(-50%) scale(0.9) rotate(500deg); } /* Cae */
+@keyframes ball-arc-animation {
+    0% { left: 0; top: 100px; opacity: 1; transform: scale(0.8) rotate(0deg); }
+    30% { top: -20px; transform: scale(1) rotate(180deg); }
+    80% { left: 50%; top: 130px; transform: translateX(-50%) scale(1) rotate(360deg); }
+    100% { left: 50%; top: 250px; opacity: 0; transform: translateX(-50%) scale(0.9) rotate(400deg); }
 }
 @keyframes net-stretch-animation {
     0%, 100% { transform: scaleY(1); }
-    50% { transform: scaleY(1.5); }
+    50% { transform: scaleY(1.4); }
 }
-@keyframes sparkle-blast {
-    0% { transform: translate(0, 0) scale(1); opacity: 1; }
-    100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
-}
-@keyframes screen-shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-}
-@keyframes fade-in-up {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes confetti-blast {
+    0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)) rotate(360deg); opacity: 0; }
 }
