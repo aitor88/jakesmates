@@ -60,12 +60,13 @@ body {
     flex-shrink: 0;
 }
 
+/* CAMBIO: Estilos mejorados para la barra de estado */
 #status-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    font-size: clamp(0.9rem, 3vw, 1.2rem);
+    font-size: clamp(0.8rem, 3vw, 1.1rem); /* Ligeramente más pequeño para móviles */
     padding: 0 10px;
     flex-shrink: 0;
 }
@@ -73,11 +74,20 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    /* Cada item ocupa un tercio del espacio para un alineado perfecto */
+    flex: 1; 
 }
-/* CAMBIO: Estilos para el display de vidas */
+#level-display {
+    justify-content: flex-start; /* Alinea a la izquierda */
+}
 #lives-display {
+    justify-content: center; /* Alinea al centro */
     gap: 5px;
 }
+#controls {
+    justify-content: flex-end; /* Alinea a la derecha */
+}
+
 #hearts-container {
     display: flex;
     gap: 2px;
@@ -87,7 +97,6 @@ body {
     font-size: 1.5em;
 }
 
-/* CAMBIO: Clase unificada para los botones de control */
 .control-btn {
     background-color: rgba(0,0,0,0.3);
     border: 2px solid white;
@@ -229,7 +238,6 @@ body {
     gap: 20px;
     justify-content: center;
 }
-/* CAMBIO: Estilo unificado para TODOS los botones del modal */
 .modal-button {
     color: white;
     padding: 15px 30px;
