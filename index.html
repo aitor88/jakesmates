@@ -26,10 +26,14 @@
 
         <div id="status-bar">
             <div class="status-item" id="level-display">Maila: 1</div>
-            <div class="status-item" id="lives-display"></div>
+            <!-- CAMBIO: Contenedor de vidas actualizado -->
+            <div class="status-item" id="lives-display">
+                <span id="lives-label">Biziak:</span>
+                <div id="hearts-container"></div>
+            </div>
             <div class="status-item" id="controls">
-                <button id="music-toggle-btn">🔊</button>
-                <button id="restart-btn">↻</button>
+                <button id="music-toggle-btn" class="control-btn">🔊</button>
+                <button id="restart-btn" class="control-btn">↻</button>
             </div>
         </div>
         <div id="message-bar">Ongi etorri!</div>
