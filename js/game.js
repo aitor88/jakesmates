@@ -15,6 +15,7 @@ const dom = {
     messageBar: document.getElementById('message-bar'),
     levelDisplay: document.getElementById('level-display'),
     livesDisplay: document.getElementById('lives-display'),
+    heartsContainer: document.getElementById('hearts-container'),
     mario: document.getElementById('mario'),
     modal: document.getElementById('modal'),
     modalContent: document.getElementById('modal-content'),
@@ -174,7 +175,7 @@ function handleCorrectClick(blockElement) {
 
 function handleWrongClick() {
     sounds.wrong.triggerAttackRelease('C3', '0.5');
-    gameState.boardLocked = true; // Bloquear el tablero mientras se muestra el modal
+    gameState.boardLocked = true;
     showModal({
         message: 'Erantzun okerra!',
         buttons: [{ text: 'Jarraitu', action: () => {
@@ -259,7 +260,13 @@ function setGridColumns(itemCount) {
 
 
 function updateLivesDisplay() {
-    dom.livesDisplay.innerHTML = Array(gameState.lives).fill('<span class="heart">❤</span>').join('');
+    dom.heartsContainer.innerHTML = '';
+    for (let i = 0; i < gameState.lives; i++) {
+        const heart = document.createElement('span');
+        heart.classList.add('heart');
+        heart.textContent = '❤';
+        dom.heartsContainer.appendChild(heart);
+    }
 }
 
 function animateMarioJump(targetBlock) {
