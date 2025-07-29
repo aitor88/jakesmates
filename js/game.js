@@ -23,7 +23,7 @@ const dom = {
     modalButtonContainer: document.getElementById('modal-button-container'),
     levelupAnimation: document.getElementById('levelup-animation'),
     sparkleContainer: document.getElementById('sparkle-container'),
-    musicToggleBtn: document.getElementById('music-toggle-btn'),
+    // CAMBIO: Eliminada la referencia al botón de música
     backgroundMusic: document.getElementById('background-music'),
     restartBtn: document.getElementById('restart-btn')
 };
@@ -378,40 +378,19 @@ function generateDistractors(correctItems, count, max, itemPool) {
     return Array.from(distractors);
 }
 
-function toggleMusic() {
-    if (dom.backgroundMusic.src && dom.backgroundMusic.src.includes('http')) { 
-        if (gameState.musicPlaying) {
-            dom.backgroundMusic.pause();
-            dom.musicToggleBtn.textContent = '🔇';
-        } else {
-            dom.backgroundMusic.play().catch(e => console.error("Musika ezin da erreproduzitu:", e));
-            dom.musicToggleBtn.textContent = '🔊';
-        }
-        gameState.musicPlaying = !gameState.musicPlaying;
-    } else if (dom.backgroundMusic.src) { 
-         if (gameState.musicPlaying) {
-            dom.backgroundMusic.pause();
-            dom.musicToggleBtn.textContent = '🔇';
-        } else {
-            dom.backgroundMusic.play().catch(e => console.error("Musika ezin da erreproduzitu:", e));
-            dom.musicToggleBtn.textContent = '🔊';
-        }
-        gameState.musicPlaying = !gameState.musicPlaying;
-    }
-    else {
-        console.log("Ez da musikaren URL-rik ezarri.");
-    }
-}
-
+// CAMBIO: Eliminada la función toggleMusic
 // --- JOKOAREN HASIERA ---
 window.onload = () => {
-    dom.musicToggleBtn.addEventListener('click', toggleMusic);
     dom.restartBtn.addEventListener('click', confirmRestart);
 
     showModal({
         message: 'Zenbakien Jauziak',
         buttons: [{ text: 'Jolasten Hasi!', action: async () => {
             await Tone.start();
+            // Iniciar la música de fondo si hay una fuente
+            if (dom.backgroundMusic.src && dom.backgroundMusic.src !== window.location.href) {
+                dom.backgroundMusic.play().catch(e => console.error("Musika ezin da erreproduzitu:", e));
+            }
             startGame();
         }, class: 'confirm' }]
     });
