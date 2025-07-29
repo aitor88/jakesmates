@@ -77,7 +77,9 @@ body {
     color: var(--mario-red);
     font-size: 1.5em;
 }
-#music-toggle-btn {
+
+/* CAMBIO: Estilos para los botones de control */
+#music-toggle-btn, #restart-btn {
     background: none;
     border: 2px solid white;
     border-radius: 50%;
@@ -89,7 +91,12 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0;
 }
+#restart-btn {
+    font-size: 1.8rem; /* Ajuste para que el icono se vea bien */
+}
+
 
 /* Tablero de juego con los bloques */
 #game-board {
@@ -187,7 +194,6 @@ body {
     max-width: 90%;
     position: relative;
     overflow: hidden;
-    /* CAMBIO: Usar Flexbox para un centrado perfecto */
     display: flex;
     flex-direction: column;
     align-items: center;
