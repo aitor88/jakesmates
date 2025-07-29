@@ -15,18 +15,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- 
-      MUSIKA ELEMENTUA: Ruta actualizada.
-    -->
     <audio id="background-music" loop src="audio/musica.mp3"></audio>
 
     <div id="game-container">
-        <!-- 
-          LOGO ELEMENTUA: Izen zuzena jarrita dago jada.
-          Ziurtatu 'logo_jakes.png' 'assets' karpetan dagoela.
-        -->
         <div id="logo-container">
-            <!-- CAMBIO: Añadido un 'onerror' mejorado para ayudarte a depurar si el logo no se encuentra. -->
             <img id="logo" src="assets/logo_jakes.png" alt="Jokoaren Logoa" onerror="this.onerror=null; this.src='https://placehold.co/300x150/E52521/FFFFFF?text=Logo+ez+da+aurkitu';">
         </div>
 
@@ -56,7 +48,9 @@
         </div>
     </div>
 
-    <!-- Enlace al archivo de lógica JavaScript -->
+    <!-- CAMBIO: Se carga primero el archivo de niveles -->
+    <script src="js/levels.js"></script>
+    <!-- Y después, el archivo con la lógica del juego -->
     <script src="js/game.js"></script>
 </body>
 </html>
