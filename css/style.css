@@ -60,13 +60,12 @@ body {
     flex-shrink: 0;
 }
 
-/* CAMBIO: Estilos mejorados para la barra de estado */
 #status-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    font-size: clamp(0.8rem, 3vw, 1.1rem); /* Ligeramente más pequeño para móviles */
+    font-size: clamp(0.8rem, 3vw, 1.1rem);
     padding: 0 10px;
     flex-shrink: 0;
 }
@@ -74,18 +73,17 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    /* Cada item ocupa un tercio del espacio para un alineado perfecto */
     flex: 1; 
 }
 #level-display {
-    justify-content: flex-start; /* Alinea a la izquierda */
+    justify-content: flex-start;
 }
 #lives-display {
-    justify-content: center; /* Alinea al centro */
+    justify-content: center;
     gap: 5px;
 }
 #controls {
-    justify-content: flex-end; /* Alinea a la derecha */
+    justify-content: flex-end;
 }
 
 #hearts-container {
@@ -114,9 +112,6 @@ body {
 }
 .control-btn:active {
     background-color: rgba(0,0,0,0.6);
-}
-#music-toggle-btn {
-    font-size: 1.5rem;
 }
 #restart-btn {
     font-size: 1.8rem;
