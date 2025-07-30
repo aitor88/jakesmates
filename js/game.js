@@ -80,7 +80,6 @@ function setupLevel() {
         case 'subtraction':
         case 'mixed_ops':
             correctItems = generateMathProblems(levelData);
-            // CAMBIO: Ordenar los problemas por su resultado para que sean intuitivos
             correctItems.sort((a, b) => a.answer - b.answer);
             const mathDistractors = generateDistractors(correctItems.map(p => p.answer), levelData.distractors, levelData.maxNum * 2);
             displayItems = [...correctItems, ...mathDistractors.map(d => ({ text: d, answer: d, type: 'distractor' }))];
@@ -144,16 +143,21 @@ function handleBlockClick(blockElement, blockValue) {
     if (gameState.boardLocked || blockElement.classList.contains('used')) return;
 
     const levelData = gameState.currentQuestionData;
-
-    let expectedValue = gameState.sequence[gameState.currentStep];
-    if (typeof expectedValue === 'object') expectedValue = expectedValue.answer;
-
     let isCorrect = false;
-    // CAMBIO: Lógica de validación corregida y simplificada
+
+    // Lógica de validación simplificada y corregida
     if (levelData.type === 'color_find') {
-        if (blockValue === levelData.color) isCorrect = true;
+        if (blockValue === levelData.color) {
+            isCorrect = true;
+        }
     } else {
-        if (blockValue === expectedValue) isCorrect = true;
+        let expectedValue = gameState.sequence[gameState.currentStep];
+        if (typeof expectedValue === 'object') {
+            expectedValue = expectedValue.answer;
+        }
+        if (blockValue === expectedValue) {
+            isCorrect = true;
+        }
     }
 
     if (isCorrect) {
@@ -168,18 +172,10 @@ function handleCorrectClick(blockElement) {
     blockElement.classList.add('used', 'correct');
     animateMarioJump(blockElement);
     
-    // CAMBIO: Lógica corregida para 'color_find'
-    if (gameState.currentQuestionData.type === 'color_find') {
-        const index = gameState.sequence.indexOf(gameState.currentQuestionData.color);
-        if (index > -1) {
-            gameState.sequence.splice(index, 1);
-        }
-    } else {
-        gameState.currentStep++;
-    }
+    gameState.currentStep++;
     
-    if ( (gameState.currentQuestionData.type === 'color_find' && gameState.sequence.length === 0) ||
-         (gameState.currentQuestionData.type !== 'color_find' && gameState.currentStep >= gameState.sequence.length) ) {
+    // Comprobar si el nivel está completado
+    if (gameState.currentStep >= gameState.sequence.length) {
         gameState.boardLocked = true;
         setTimeout(levelUp, 1000);
     }
@@ -412,7 +408,6 @@ window.onload = () => {
         }
     });
 
-    // CAMBIO: Eliminado el preventDefault para evitar problemas táctiles
     document.body.addEventListener('touchmove', function(event) {
         // Se permite el comportamiento por defecto
     }, { passive: true });
