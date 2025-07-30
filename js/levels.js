@@ -40,8 +40,8 @@ const gameConfig = {
         ],
         // 4. MAILA (3x3)
         [
-            { type: 'even', count: 5, max: 10, distractors: 4, message: 'Aukeratu 5 BIKOITI' },
-            { type: 'odd', count: 5, max: 11, distractors: 4, message: 'Aukeratu 5 BAKOITI' },
+            { type: 'even', count: 5, max: 10, distractors: 4, message: 'Sakatu 5 BIKOITI, txikienetik handienera' },
+            { type: 'odd', count: 5, max: 11, distractors: 4, message: 'Sakatu 5 BAKOITI, txikienetik handienera' },
             { type: 'sequence', values: [8, 7, 6, 5], distractors: 5, message: 'Atzerantz: 8, 7, 6, 5' },
             { type: 'color_sequence', values: ['GORRIA', 'URDINA', 'BERDEA'], distractors: 6, message: 'Jarraitu koloreen ordena' },
             { type: 'sequence_by', start: 2, step: 2, count: 4, distractors: 5, message: 'Jarraitu seriea: 2, 4...' }
@@ -57,8 +57,8 @@ const gameConfig = {
         // 6. MAILA (3x3)
         [
             { type: 'sequence', values: [10, 11, 12, 13, 14], distractors: 4, message: 'Sakatu ordenan: 10...14' },
-            { type: 'even', count: 6, max: 12, distractors: 3, message: 'Aukeratu 6 BIKOITI' },
-            { type: 'odd', count: 6, max: 13, distractors: 3, message: 'Aukeratu 6 BAKOITI' },
+            { type: 'even', count: 6, max: 12, distractors: 3, message: 'Sakatu 6 BIKOITI, txikienetik handienera' },
+            { type: 'odd', count: 6, max: 13, distractors: 3, message: 'Sakatu 6 BAKOITI, txikienetik handienera' },
             { type: 'color_find', color: 'LARANJA', count: 6, distractors: 3, message: 'Sakatu 6 LARANJA' },
             { type: 'sequence', values: [9, 10, 11, 12, 13], distractors: 4, message: 'Sakatu ordenan: 9...13' }
         ],
@@ -82,8 +82,8 @@ const gameConfig = {
         [
             { type: 'find_result_add', question: [10, 9], distractors: 15, message: 'Zenbat da 10 + 9?' },
             { type: 'sequence', values: [20, 21, 22, 23, 24], distractors: 11, message: 'Sakatu ordenan: 20...24' },
-            { type: 'even', count: 9, max: 20, distractors: 7, message: 'Aukeratu 9 BIKOITI' },
-            { type: 'odd', count: 9, max: 21, distractors: 7, message: 'Aukeratu 9 BAKOITI' },
+            { type: 'even', count: 9, max: 20, distractors: 7, message: 'Sakatu 9 BIKOITI, txikienetik handienera' },
+            { type: 'odd', count: 9, max: 21, distractors: 7, message: 'Sakatu 9 BAKOITI, txikienetik handienera' },
             { type: 'find_result_sub', question: [18, 7], distractors: 15, message: 'Zenbat da 18 - 7?' }
         ],
         // 10. MAILA (4x4)
@@ -99,8 +99,8 @@ const gameConfig = {
             { type: 'find_result_add', question: [11, 8], distractors: 15, message: 'Zenbat da 11 + 8?' },
             { type: 'find_result_sub', question: [20, 5], distractors: 15, message: 'Zenbat da 20 - 5?' },
             { type: 'sequence', values: [21, 22, 23, 24], distractors: 12, message: 'Sakatu ordenan: 21...24' },
-            { type: 'even', count: 8, max: 16, distractors: 8, message: 'Aukeratu 8 BIKOITI' },
-            { type: 'odd', count: 8, max: 17, distractors: 8, message: 'Aukeratu 8 BAKOITI' }
+            { type: 'even', count: 8, max: 16, distractors: 8, message: 'Sakatu 8 BIKOITI, txikienetik handienera' },
+            { type: 'odd', count: 8, max: 17, distractors: 8, message: 'Sakatu 8 BAKOITI, txikienetik handienera' }
         ],
         // 12. MAILA (4x4)
         [
@@ -120,8 +120,8 @@ const gameConfig = {
         ],
         // 14. MAILA (4x4)
         [
-            { type: 'even', count: 10, max: 20, distractors: 6, message: 'Aukeratu 10 BIKOITI' },
-            { type: 'odd', count: 10, max: 21, distractors: 6, message: 'Aukeratu 10 BAKOITI' },
+            { type: 'even', count: 10, max: 20, distractors: 6, message: 'Sakatu 10 BIKOITI, txikienetik handienera' },
+            { type: 'odd', count: 10, max: 21, distractors: 6, message: 'Sakatu 10 BAKOITI, txikienetik handienera' },
             { type: 'sequence', values: [35, 34, 33, 32], distractors: 12, message: 'Atzerantz: 35...32' },
             { type: 'find_smallest', count: 16, max: 40, message: 'Zein da txikiena?' },
             { type: 'color_find', color: 'BERDEA', count: 10, distractors: 6, message: 'Sakatu 10 BERDE' }
@@ -139,8 +139,8 @@ const gameConfig = {
             { type: 'sequence', values: [45, 44, 43, 42, 41, 40, 39], distractors: 18, message: 'Atzerantz: 45...39' },
             { type: 'color_sequence', values: ['M', 'L', 'B', 'H'].map(c => colorNames.find(name => name.startsWith(c))), distractors: 21, message: 'Jarraitu koloreak' },
             { type: 'find_greatest', count: 25, max: 80, message: 'Zein da handiena?' },
-            { type: 'even', count: 12, max: 24, distractors: 13, message: 'Aukeratu 12 BIKOITI' },
-            { type: 'odd', count: 12, max: 25, distractors: 13, message: 'Aukeratu 12 BAKOITI' }
+            { type: 'even', count: 12, max: 24, distractors: 13, message: 'Sakatu 12 BIKOITI, txikienetik handienera' },
+            { type: 'odd', count: 12, max: 25, distractors: 13, message: 'Sakatu 12 BAKOITI, txikienetik handienera' }
         ],
         // 17. MAILA (5x5)
         [
@@ -160,8 +160,8 @@ const gameConfig = {
         ],
         // 19. MAILA (5x5)
         [
-            { type: 'even', count: 14, max: 28, distractors: 11, message: 'Aukeratu 14 BIKOITI' },
-            { type: 'odd', count: 14, max: 29, distractors: 11, message: 'Aukeratu 14 BAKOITI' },
+            { type: 'even', count: 14, max: 28, distractors: 11, message: 'Sakatu 14 BIKOITI, txikienetik handienera' },
+            { type: 'odd', count: 14, max: 29, distractors: 11, message: 'Sakatu 14 BAKOITI, txikienetik handienera' },
             { type: 'find_result_add', question: [22, 11], distractors: 24, message: 'Zenbat da 22 + 11?' },
             { type: 'find_result_sub', question: [35, 15], distractors: 24, message: 'Zenbat da 35 - 15?' },
             { type: 'sequence', values: [70, 69, 68, 67], distractors: 21, message: 'Atzerantz: 70...67' }
@@ -185,8 +185,8 @@ const gameConfig = {
         // 22. MAILA (6x6)
         [
             { type: 'find_greatest', count: 36, max: 100, message: 'Zein da handiena?' },
-            { type: 'even', count: 18, max: 36, distractors: 18, message: 'Aukeratu 18 BIKOITI' },
-            { type: 'odd', count: 18, max: 37, distractors: 18, message: 'Aukeratu 18 BAKOITI' },
+            { type: 'even', count: 18, max: 36, distractors: 18, message: 'Sakatu 18 BIKOITI, txikienetik handienera' },
+            { type: 'odd', count: 18, max: 37, distractors: 18, message: 'Sakatu 18 BAKOITI, txikienetik handienera' },
             { type: 'sequence_by', start: 20, step: -2, count: 10, distractors: 26, message: 'Atzerantz 2tik 2ra' },
             { type: 'color_sequence', values: ['U', 'M', 'U', 'M', 'U'].map(c => colorNames.find(name => name.startsWith(c))), distractors: 31, message: 'Jarraitu sekuentzia' }
         ],
@@ -203,8 +203,8 @@ const gameConfig = {
             { type: 'color_find', color: 'LARANJA', count: 18, distractors: 18, message: 'Sakatu 18 LARANJA' },
             { type: 'sequence_by', start: 25, step: 25, count: 6, distractors: 30, message: 'Jarraitu seriea: 25, 50...' },
             { type: 'sequence', values: [100, 99, 98, 97, 96, 95], distractors: 30, message: 'Atzerantz: 100...95' },
-            { type: 'even', count: 20, max: 40, distractors: 16, message: 'Aukeratu 20 BIKOITI' },
-            { type: 'odd', count: 20, max: 41, distractors: 16, message: 'Aukeratu 20 BAKOITI' }
+            { type: 'even', count: 20, max: 40, distractors: 16, message: 'Sakatu 20 BIKOITI, txikienetik handienera' },
+            { type: 'odd', count: 20, max: 41, distractors: 16, message: 'Sakatu 20 BAKOITI, txikienetik handienera' }
         ],
         // 25. MAILA (6x6)
         [
@@ -224,8 +224,8 @@ const gameConfig = {
         ],
         // 27. MAILA (6x6)
         [
-            { type: 'even', count: 22, max: 44, distractors: 14, message: 'Aukeratu 22 BIKOITI' },
-            { type: 'odd', count: 22, max: 45, distractors: 14, message: 'Aukeratu 22 BAKOITI' },
+            { type: 'even', count: 22, max: 44, distractors: 14, message: 'Sakatu 22 BIKOITI, txikienetik handienera' },
+            { type: 'odd', count: 22, max: 45, distractors: 14, message: 'Sakatu 22 BAKOITI, txikienetik handienera' },
             { type: 'find_result_add', question: [60, 40], distractors: 35, message: 'Zenbat da 60 + 40?' },
             { type: 'find_result_sub', question: [100, 30], distractors: 35, message: 'Zenbat da 100 - 30?' },
             { type: 'find_greatest', count: 36, max: 1000, message: 'Zein da handiena?' }
@@ -242,16 +242,16 @@ const gameConfig = {
         [
             { type: 'find_result_add', question: [75, 25], distractors: 35, message: 'Zenbat da 75 + 25?' },
             { type: 'find_result_sub', question: [90, 45], distractors: 35, message: 'Zenbat da 90 - 45?' },
-            { type: 'even', count: 24, max: 48, distractors: 12, message: 'Aukeratu 24 BIKOITI' },
-            { type: 'odd', count: 24, max: 49, distractors: 12, message: 'Aukeratu 24 BAKOITI' },
+            { type: 'even', count: 24, max: 48, distractors: 12, message: 'Sakatu 24 BIKOITI, txikienetik handienera' },
+            { type: 'odd', count: 24, max: 49, distractors: 12, message: 'Sakatu 24 BAKOITI, txikienetik handienera' },
             { type: 'find_greatest', count: 36, max: 300, message: 'Zein da handiena?' }
         ],
         // 30. MAILA (6x6)
         [
             { type: 'find_result_add', question: [100, 100], distractors: 35, message: 'Azken erronka: 100 + 100?' },
             { type: 'sequence', values: [200, 199, 198, 197, 196, 195], distractors: 30, message: 'Atzerantz: 200...195' },
-            { type: 'even', count: 25, max: 50, distractors: 11, message: 'Aukeratu 25 BIKOITI' },
-            { type: 'odd', count: 25, max: 51, distractors: 11, message: 'Aukeratu 25 BAKOITI' },
+            { type: 'even', count: 25, max: 50, distractors: 11, message: 'Sakatu 25 BIKOITI, txikienetik handienera' },
+            { type: 'odd', count: 25, max: 51, distractors: 11, message: 'Sakatu 25 BAKOITI, txikienetik handienera' },
             { type: 'sequence_by', start: 25, step: 25, count: 10, distractors: 26, message: 'Jarraitu seriea: 25, 50...' }
         ]
     ]
