@@ -76,14 +76,6 @@ function setupLevel() {
             correctItems = generateNumberSequence(levelData);
             displayItems = [...correctItems, ...generateDistractors(correctItems, levelData.distractors, levelData.max || 50)];
             break;
-        case 'addition':
-        case 'subtraction':
-        case 'mixed_ops':
-            correctItems = generateMathProblems(levelData);
-            correctItems.sort((a, b) => a.answer - b.answer);
-            const mathDistractors = generateDistractors(correctItems.map(p => p.answer), levelData.distractors, levelData.maxNum * 2);
-            displayItems = [...correctItems, ...mathDistractors.map(d => ({ text: d, answer: d, type: 'distractor' }))];
-            break;
         case 'color_find':
             correctItems = Array(levelData.count).fill(levelData.color);
             const colorDistractors = generateDistractors(correctItems, levelData.distractors, 0, colorNames);
@@ -93,6 +85,25 @@ function setupLevel() {
             correctItems = levelData.values;
             const colorSeqDistractors = generateDistractors(correctItems, levelData.distractors, 0, colorNames);
             displayItems = [...correctItems, ...colorSeqDistractors];
+            break;
+        // CAMBIO: Nuevos tipos de pregunta
+        case 'find_result_add':
+            correctItems = [levelData.question[0] + levelData.question[1]];
+            displayItems = [...correctItems, ...generateDistractors(correctItems, levelData.distractors, levelData.question[0] + levelData.question[1] + 10)];
+            break;
+        case 'find_result_sub':
+            correctItems = [levelData.question[0] - levelData.question[1]];
+            displayItems = [...correctItems, ...generateDistractors(correctItems, levelData.distractors, levelData.question[0])];
+            break;
+        case 'find_greatest':
+            const greatestNumbers = generateNumberSet(levelData.count, levelData.max, () => true);
+            correctItems = [Math.max(...greatestNumbers)];
+            displayItems = greatestNumbers;
+            break;
+        case 'find_smallest':
+            const smallestNumbers = generateNumberSet(levelData.count, levelData.max, () => true);
+            correctItems = [Math.min(...smallestNumbers)];
+            displayItems = smallestNumbers;
             break;
     }
     
@@ -113,21 +124,13 @@ function createBlock(item) {
     const content = document.createElement('span');
     content.classList.add('block-content');
     
-    let blockValue;
+    let blockValue = item; // Por defecto, el valor es el item mismo
 
-    if (typeof item === 'object' && item.text) { 
-        content.textContent = item.text;
-        blockValue = item.answer;
-        if (String(item.text).length >= 4) {
-            content.classList.add('small-font');
-        }
-    } else if (colorNames.includes(item)) { 
-        blockValue = item;
+    if (colorNames.includes(item)) { 
         blockInner.style.backgroundColor = colorMap[item].hex;
         block.dataset.color = item;
     } else { 
         content.textContent = item;
-        blockValue = item;
         if (String(item).length >= 3) {
             content.classList.add('small-font');
         }
@@ -145,16 +148,13 @@ function handleBlockClick(blockElement, blockValue) {
     const levelData = gameState.currentQuestionData;
     let isCorrect = false;
 
-    // Lógica de validación simplificada y corregida
+    // Lógica de validación corregida y robusta
     if (levelData.type === 'color_find') {
         if (blockValue === levelData.color) {
             isCorrect = true;
         }
     } else {
-        let expectedValue = gameState.sequence[gameState.currentStep];
-        if (typeof expectedValue === 'object') {
-            expectedValue = expectedValue.answer;
-        }
+        const expectedValue = gameState.sequence[gameState.currentStep];
         if (blockValue === expectedValue) {
             isCorrect = true;
         }
@@ -172,10 +172,23 @@ function handleCorrectClick(blockElement) {
     blockElement.classList.add('used', 'correct');
     animateMarioJump(blockElement);
     
-    gameState.currentStep++;
+    // Lógica de avance corregida
+    if (gameState.currentQuestionData.type === 'color_find') {
+        // En 'color_find', no usamos currentStep, sino que reducimos la secuencia
+        const index = gameState.sequence.indexOf(gameState.currentQuestionData.color);
+        if (index > -1) {
+            gameState.sequence.splice(index, 1);
+        }
+    } else {
+        gameState.currentStep++;
+    }
     
-    // Comprobar si el nivel está completado
-    if (gameState.currentStep >= gameState.sequence.length) {
+    // Comprobación de fin de nivel unificada
+    const isLevelComplete = (gameState.currentQuestionData.type === 'color_find')
+        ? gameState.sequence.length === 0
+        : gameState.currentStep >= gameState.sequence.length;
+
+    if (isLevelComplete) {
         gameState.boardLocked = true;
         setTimeout(levelUp, 1000);
     }
