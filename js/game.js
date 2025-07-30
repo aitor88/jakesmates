@@ -80,6 +80,8 @@ function setupLevel() {
         case 'subtraction':
         case 'mixed_ops':
             correctItems = generateMathProblems(levelData);
+            // CAMBIO: Ordenar los problemas por su resultado para que sean intuitivos
+            correctItems.sort((a, b) => a.answer - b.answer);
             const mathDistractors = generateDistractors(correctItems.map(p => p.answer), levelData.distractors, levelData.maxNum * 2);
             displayItems = [...correctItems, ...mathDistractors.map(d => ({ text: d, answer: d, type: 'distractor' }))];
             break;
@@ -147,6 +149,7 @@ function handleBlockClick(blockElement, blockValue) {
     if (typeof expectedValue === 'object') expectedValue = expectedValue.answer;
 
     let isCorrect = false;
+    // CAMBIO: Lógica de validación corregida y simplificada
     if (levelData.type === 'color_find') {
         if (blockValue === levelData.color) isCorrect = true;
     } else {
@@ -164,9 +167,19 @@ function handleCorrectClick(blockElement) {
     sounds.coin.triggerAttackRelease('G5', '0.1');
     blockElement.classList.add('used', 'correct');
     animateMarioJump(blockElement);
-    gameState.currentStep++;
     
-    if (gameState.currentStep >= gameState.sequence.length) {
+    // CAMBIO: Lógica corregida para 'color_find'
+    if (gameState.currentQuestionData.type === 'color_find') {
+        const index = gameState.sequence.indexOf(gameState.currentQuestionData.color);
+        if (index > -1) {
+            gameState.sequence.splice(index, 1);
+        }
+    } else {
+        gameState.currentStep++;
+    }
+    
+    if ( (gameState.currentQuestionData.type === 'color_find' && gameState.sequence.length === 0) ||
+         (gameState.currentQuestionData.type !== 'color_find' && gameState.currentStep >= gameState.sequence.length) ) {
         gameState.boardLocked = true;
         setTimeout(levelUp, 1000);
     }
@@ -399,8 +412,8 @@ window.onload = () => {
         }
     });
 
-    // CAMBIO: Código para prevenir el "pull-to-refresh" en móviles
+    // CAMBIO: Eliminado el preventDefault para evitar problemas táctiles
     document.body.addEventListener('touchmove', function(event) {
-        event.preventDefault();
-    }, { passive: false });
+        // Se permite el comportamiento por defecto
+    }, { passive: true });
 };
